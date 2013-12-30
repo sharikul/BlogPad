@@ -24,7 +24,7 @@ Here is how you'd fetch posts in a typical WordPress theme:
 <?php while( have_posts() ): the_post(); ?>
   <article>
     <h1><?php the_title();?></h1>
-    <p><?php the_content();?></p>
+    <?php the_content();?>
   </article>
 <?php endwhile; ?>
 ```
@@ -34,7 +34,7 @@ And here's how you'd fetch posts in a BlogPad theme:
 {- BEGIN POSTS -}
   <article>
     <h1>{- title -}</h1>
-    <p>{- post -}</p>
+    {- post -}
   </article>
 {- END POSTS -}
 ```
