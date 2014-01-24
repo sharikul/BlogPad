@@ -1,0 +1,15 @@
+{- FILE STRUCT -}
+
+{- BEGIN METADATA -}
+	{- NAME: Plain Theme -}
+	{- AUTHOR: Sharikul Islam -}
+{- END METADATA -}
+
+{- BEGIN STRUCT -}
+	{- HOMEPAGE: default/homepage -}
+	{- STYLESHEET: default/css -}
+	{- POST: default/blog_post -}
+	{- URL_STRUCT: lstruct -}
+	{- CATEGORY: cat -}
+	{- ERROR: default/error -}
+{- END STRUCT -}

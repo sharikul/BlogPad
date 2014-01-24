@@ -1,0 +1,117 @@
+body {
+    font: {
+        family: $mainfont;
+    }
+
+    background: lighten(beige, 5%);
+
+    &#postpage {
+        background: lighten(beige, 3%);
+    }
+}
+
+.standard {
+    color: darken(lightseagreen, 15%);
+}
+
+header {
+    background: $maincolor;
+    text-align: center;
+
+    li {
+        display: inline-block;
+        padding: 8px;
+        color: azure;
+    }
+}
+
+#actions {
+    background: lighten(beige, 1%);
+    padding: 10px;
+    text-align: center;
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    h3 {
+        font-size: .9em;
+        margin-bottom: 10px;
+    }
+
+    li {
+        text-align: center;
+        border-right: 1px solid gainsboro;
+        margin-right: 2em;
+        display: inline-block;
+        padding-right: 2em;
+    }
+}
+
+@font-face {
+    font: {
+        family: 'icomoon';
+        weight: normal;
+        style: normal;
+    }
+    src:url('../fonts/icomoon.eot');
+    src:url('../fonts/icomoon.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/icomoon.woff') format('woff'),
+        url('../fonts/icomoon.ttf') format('truetype'),
+        url('../fonts/icomoon.svg#icomoon') format('svg');
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    speak: none;
+    text-transform: none;
+    line-height: 1;
+    font: {
+        family: 'icomoon';
+        style: normal;
+        weight: normal;
+        variant: normal;
+    }
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-pen:before {
+    content: "\e600";
+}
+.icon-file:before {
+    content: "\e601";
+}
+.icon-paint-format:before {
+    content: "\e602";
+}
+.icon-info:before {
+    content: "\e603";
+}
+
+.button {
+    border-radius: 5px;
+    border: 1px solid cadetBlue;
+    text-align: center;
+    padding: 7px;
+    background: darken(lightseagreen, 10%);
+    color: whitesmoke;
+    font: {
+        family: $mainfont;
+        size: .7em;
+        weight: bold;
+    }
+    margin-top: 15px;
+    cursor: pointer;
+    display: inline-block;
+
+    &.alternative {
+        background: darken(lightseagreen, 5%);
+    }
+
+    &.emphasis {
+        background: darken(lightseagreen, 8%);
+    }
+}

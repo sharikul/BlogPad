@@ -1,0 +1,11 @@
+{- LINKS STRUCT -}
+
+{- BEGIN LINKS -}
+	
+	{- PATTERN: p/%slug%, TEMPLATE: POST -}
+
+	{- PATTERN: page/%num%, TEMPLATE: HOMEPAGE -}
+
+	{- PATTERN: c/%word%/%num%, TEMPLATE: CATEGORY -}
+
+{- END LINKS -}

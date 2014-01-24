@@ -1,0 +1,11 @@
+{- URL STRUCT -}
+
+{- BEGIN URLS -}
+
+	{- PATTERN: p/%slug%, TEMPLATE: POST -}
+
+	{- PATTERN: category/%word%/?%num%?, TEMPLATE: CATEGORY -}
+
+	{- PATTERN: page/%num%, TEMPLATE: HOMEPAGE -}
+
+{- END URLS -}

@@ -1,0 +1,76 @@
+#filter_form {
+    text-align: center;
+
+    input[type=text] {
+        padding: 5px;
+        border: 1px solid lightgray;
+        background: darken(#f8f8e8, 5%);
+        outline: none;
+        text-align: center;
+        color: rgb(87, 145, 147);
+        font: {
+            family: $mainfont;
+            size: 15px;
+            weight: bold;
+        }
+    }
+}
+
+#posts {
+    margin-top: 2em;
+    text-align: center;
+}
+
+article {
+    &:nth-child(odd) {
+        background: lighten(beige, 2%);
+        color: $maincolor;
+    }
+
+    &:nth-child(even) {
+        background: beige;
+        color: darken($maincolor, 4%);
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    li {
+        display: inline-block;
+        vertical-align: top;
+
+        &:after {
+            content: " • ";
+        }
+
+        &:last-child:after {
+            content: '';
+        }
+
+        p {
+            display: inline-block;
+        }
+    }
+
+    p {
+        text-align: center;
+        font-size: .8em;
+        margin-top: 10px;
+    }
+
+    padding: 17px;
+}
+
+#paginator {
+    text-align: center;
+}

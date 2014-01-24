@@ -1,0 +1,20 @@
+{- FILE STRUCT -}
+
+{- BEGIN METADATA -}
+	{- NAME: Default Theme -}
+	{- AUTHOR: Sharikul Islam -}
+	{- RELEASE: December 2013 -}
+	{- WEBSITE: # -}
+	{- SCREENSHOT: img.png -}
+{- END METADATA -}
+
+{- BEGIN FILES -}
+	{- HOMEPAGE: index -}
+	{- STYLESHEET: ISstyle -}
+	{- POST: post -}
+	{- CATEGORY: category -}
+	{- PROFILE: profile -}
+	{- URL_STRUCT: link -}
+	{- STATIC: static -}
+	{- ERROR: 404 -}
+{- END FILES -}

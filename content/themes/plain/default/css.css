@@ -1,0 +1,12 @@
+* {
+	margin: 0;
+}
+
+header {
+	padding: 5px;
+	border-bottom: 1px solid lightgray;
+}
+
+li {
+	display: inline-block;
+}

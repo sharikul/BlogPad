@@ -1,0 +1,1 @@
+-- Templates that are intended to be used to display posts should be stored in this directory. --

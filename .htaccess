@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /BlogPad/
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /BlogPad/index.php [L]

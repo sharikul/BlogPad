@@ -1,0 +1,23 @@
+* {
+	font-family: sans-serif;
+}
+
+body {
+    background: whitesmoke;
+}
+
+pre, code {
+    font-family: monospace;
+}
+
+.bp-countdown {
+    background: whitesmoke;
+    display: inline-block !important;
+}
+
+.cat {
+    display: inline-block;
+    padding: 5px;
+    background: beige;
+    border: 1px solid lightgray;
+}

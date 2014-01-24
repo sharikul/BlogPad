@@ -1,0 +1,17 @@
+{- GET 'header' -}
+
+	
+{- BEGIN POSTS -}
+		<h1>{- title -}</h1>
+		<p>Posted on {- date: %date% %month% %year% -}</p>
+		<p>{- excerpt -}</p>
+{- END POSTS -}
+
+{- BEGIN PAGINATION -}
+    
+    <p>{- previous -}</p>
+    <p>{- next:Next page -}</p>
+
+{- END PAGINATION -}
+
+{- GET 'footer' -}

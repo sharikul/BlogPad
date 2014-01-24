@@ -1,0 +1,34 @@
+$mainfont: open-sans, sans-serif;
+$maincolor: cadetBlue;
+
+strong {
+    font-weight: bold;
+}
+
+em {
+    font-style: italic;
+}
+
+abbr {
+   border-bottom: 1px #14716c dotted;
+}
+
+h1 {
+    font-size: 1.7em;
+}
+
+h2 {
+    font-size: 1.3em;
+}
+
+h3 {
+    font-weight: 0.9em;
+}
+
+h4 {
+    font-weight: 0.6em;
+}
+
+tr {
+    margin: 5px;
+}
