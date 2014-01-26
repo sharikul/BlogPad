@@ -38,13 +38,13 @@
 
 <p>Though not a CMS, BlogPad is intended to be used 'as one'. So you'll need to delegate routing to BlogPad through a .htaccess file.</p>
 
-<p>`RewriteEngine On
-RewriteBase /blog/</p>
+<pre><code>RewriteEngine On
+RewriteBase /blog/
 
-<p>RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /blog/index.php [L]
-`</p>
+</code></pre>
 
 <p><strong><code>blog</code> denotes that BlogPad's files are stored within a directory called <code>/blog/</code>. If it's stored in a different directory, <code>blog</code> will be replaced with the name of the directory on your computer/server. If it's not in a directory (i.e. root), RewriteBase will be <code>RewriteBase /</code> and RewriteRule will be <code>RewriteRule ./index.php [L]</code></strong>.</p>
         </section>
