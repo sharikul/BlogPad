@@ -1,6 +1,7 @@
 # Getting Started
 **You should follow the instructions or tips provided in this help file after following the instructions of system_requirements.md.**
 
+## settings.php
 _settings.php_ is the file which is home to the wide variety of settings that impacts your BlogPad blog. 
 
 Here, you'll gain an understanding of the keys found in this file and their significance to your blog:
@@ -19,6 +20,25 @@ Here, you'll gain an understanding of the keys found in this file and their sign
 
 * `no_post_message` - This key should store a message that will be displayed whenever posts cannot be shown. If you try to visit your blog's homepage when you haven't added any posts, you'll see this message. **You can also insert HTML tags to customize the appearance of this message**.
 
-* `post_sort_type` - This key should only hold the values `DESC` or `ASC` which stand for _descending_ and _ascending_, respectively, and these signify the order at which posts should appear in. When set to `DESC`, posts will begin to show starting from the most recently added post. 
+* `post_sort_type` - This key should only hold the values `DESC` or `ASC` which stand for _descending_ and _ascending_, respectively, and these signify the order in which posts should appear in. When set to `DESC`, posts will begin to show starting from the most recently added post. 
 
 * `accounts` - This key should hold a sub-array containing the accounts with their respective credentials. This is the format that you should follow: `username => array('firstname' => 'firstname', 'lastname' => 'lastname', 'username' => 'username', 'password' => 'password')` **Please make use of `crypt_gen.php` to generate a crypted password and this crypted password should be the value of the password key in an account array**.
+
+## Routing
+Each theme has the option of changing the presentation of links. In order for this to work, through a _.htaccess_ file, you must direct all requests to `index.php`. If BlogPad is stored in a directory on your web-server, this is what a `.htaccess` file should look for you:
+
+```txt
+RewriteEngine On
+RewriteBase /name-of-directory/
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . /name-of-directory/index.php
+```
+
+Specifying the directory name as the rewrite base ensures that other content on your web-server aren't affected by BlogPad.
+
+## Logging in
+After you've created an account (_or accounts_), you can now login to the supplied admin dashboard by pointing your web browser towards `/admin/login.php`. Once logged in, you'll be directed to the post adding screen, which looks like this:
+
+![Add Post](http://i.imgur.com/G8P2zoS.png)
