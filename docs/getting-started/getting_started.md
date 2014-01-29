@@ -27,7 +27,7 @@ Here, you'll gain an understanding of the keys found in this file and their sign
 ## Routing
 Each theme has the option of changing the presentation of links. In order for this to work, through a _.htaccess_ file, you must direct all requests to `index.php`. If BlogPad is stored in a directory on your web-server, this is what a `.htaccess` file should look for you:
 
-```txt
+```
 RewriteEngine On
 RewriteBase /name-of-directory/
 
