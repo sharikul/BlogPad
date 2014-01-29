@@ -13,3 +13,5 @@ Categories to attach to a post should be defined in _settings.php_ (and is expla
 As aforementioned, the web editor provides you with the option of live-previewing a post before publishing. Simply click "Preview Post" and a modal will appear. This is what the example post will look like when previewed (_the theme at the point of writing was not fully developed_):
 
 ![Previewing a Post](http://i.imgur.com/fGukxbW.png)
+
+## Saving Posts

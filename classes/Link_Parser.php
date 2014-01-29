@@ -88,7 +88,7 @@ class Link_Parser extends BlogPad {
 	 */ 
 
 	static function current_uri() {
-        return preg_replace('/^\/?'.basename(self::get_setting('base')).'\/?/', '', $_SERVER['REQUEST_URI']); 
+    	return preg_replace('/^\/?'.basename(self::get_setting('base')).'\/?/', '', $_SERVER['REQUEST_URI']); 
 	}
 
 	/**

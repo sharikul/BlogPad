@@ -230,7 +230,7 @@ if( isset($_POST['p_slug']) ) {
             <br>
 
             <label for="categories" class="standard">Categories:</label><br>
-            <input type="text" name="p_categories" id="categories" <?php echo ( isset($categories) ) ? "value='$categories'": '';?> placeholder="Separate by commas." readonly required>
+            <input type="text" name="p_categories" id="categories" <?php echo ( isset($categories) ) ? "value='$categories'": '';?> placeholder="Separate by commas." required>
 
             <div id="catlist">
                 <p>Your <abbr title="These are your categories that you've defined in blog.php">categories</abbr>: </p>
