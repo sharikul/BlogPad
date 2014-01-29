@@ -1,5 +1,5 @@
 # Getting Started
-**You should follow the instructions or tips provided in this help file after following the instructions of _system_requirements.md_.**
+**You should follow the instructions or tips provided in this help file after following the instructions of _system\_requirements.md_.**
 
 _settings.php_ is the file which is home to the wide variety of settings that impacts your BlogPad blog. 
 
@@ -15,10 +15,10 @@ Here, you'll gain an understanding of the keys found in this file and their sign
 
 * `categories` - This key should store an array containing sub-arrays that are presented in the `category => description` format. These categories can then be used to link to posts.
 
-* `static_posts_dir` - Likewise to `database`, this is an optional key and it should store the path to the directory which should hold static posts. 
+* `static_posts_dir` - Likewise to `database`, this is an optional key and it should store the path to the directory that should contains static posts. 
 
 * `no_post_message` - This key should store a message that will be displayed whenever posts cannot be shown. If you try to visit your blog's homepage when you haven't added any posts, you'll see this message. **You can also insert HTML tags to customize the appearance of this message**.
 
 * `post_sort_type` - This key should only hold the values `DESC` or `ASC` which stand for _descending_ and _ascending_, respectively, and these signify the order at which posts should appear in. When set to `DESC`, posts will begin to show starting from the most recently added post. 
 
-* `accounts` - This key should hold a sub-array containing the accounts with their respective credentials. This is the format that you should follow: `username => array('firstname' => 'firstname', 'lastname' => 'lastname', 'username' => 'username', 'password' => 'password')`. **Please make use of `crypt_gen.php` to generate a crypted password and this crypted password should be the value of the password key in an account array**.
+* `accounts` - This key should hold a sub-array containing the accounts with their respective credentials. This is the format that you should follow: `username => array('firstname' => 'firstname', 'lastname' => 'lastname', 'username' => 'username', 'password' => 'password')` **Please make use of `crypt_gen.php` to generate a crypted password and this crypted password should be the value of the password key in an account array**.
