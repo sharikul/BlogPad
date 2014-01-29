@@ -38,7 +38,12 @@ RewriteRule . /name-of-directory/index.php
 
 Specifying the directory name as the rewrite base ensures that other content on your web-server aren't affected by BlogPad.
 
+### Slugging it out
+The reason why BlogPad features routing even though it's not a CMS is because BlogPad enforces the pretty presentation of URL's, built up of slugs and full words - not query strings! 
+
 ## Logging in
-After you've created an account (_or accounts_), you can now login to the supplied admin dashboard by pointing your web browser towards `/admin/login.php`. Once logged in, you'll be directed to the post adding screen, which looks like this:
+After you've created an account (_or accounts_), you can now login to the supplied admin dashboard by pointing your web browser towards `/admin/login.php`. Once logged in, you'll be directed to the web editor, which looks like this:
 
 ![Add Post](http://i.imgur.com/G8P2zoS.png)
+
+Since the aim of BlogPad is to be a _**very**_ minimalistic application, the editor has also been designed to replicate that. You also have the ability to format your post's body using Markdown. 
