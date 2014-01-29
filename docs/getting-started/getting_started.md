@@ -1,5 +1,5 @@
 # Getting Started
-**You should follow the instructions or tips provided in this help file after following the instructions of system_requirements.md_.**
+**You should follow the instructions or tips provided in this help file after following the instructions of system_requirements.md.**
 
 _settings.php_ is the file which is home to the wide variety of settings that impacts your BlogPad blog. 
 
