@@ -1,0 +1,13 @@
+-- BEGIN METADATA
+Title: Now, BlogPad has caching capabilities LOL
+
+Date: 2014-01-26 17:28:30
+
+Author: sharikul
+
+Categories: Random, Sharikul
+
+Description: BlogPad can now cache post data.
+-- END METADATA
+
+Well, thanks to the help of _[phpFastCache](https://github.com/khoaofgod/phpfastcache)_, BlogPad has caching abilities.

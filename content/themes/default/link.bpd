@@ -8,4 +8,8 @@
 
 	{- PATTERN: page/%num%, TEMPLATE: HOMEPAGE -}
 
+    {- PATTERN: author/%word%/?%num%?, TEMPLATE: PROFILE -}
+
+    {- PATTERN: search/%word%/%num%?, TEMPLATE: SEARCH -}
+
 {- END URLS -}

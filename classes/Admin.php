@@ -8,6 +8,16 @@ class Admin extends BlogPad {
         set_error_handler('self::throw_error');
 
 		session_start();
+
+        if( !User::logged_in() ) {
+            header('Location: '.self::get_blog_homepage().'/admin/login.php');
+            exit;
+        }
+
+        // Sometimes the user's info can change whilst they're logged in. If that's the case, destroy the current session and redirect to login.
+        if( !User::is_still_valid() ) {
+            User::logout( self::get_blog_homepage().'/admin/login.php');
+        }
         
         if( self::has_setting('database') ) {
 		  Query::setup( self::get_setting('database') );
@@ -16,6 +26,8 @@ class Admin extends BlogPad {
 		self::load_part('header');
 
 		if( !isset( $_GET['page'] ) ) {
+
+            $author = User::get_info('fullname');
 
 			self::load_part('afterhead', array('title' => 'Add a Post'));
 			self::load_part('posts/add_posts', array('page_type' => 'new'));
@@ -47,6 +59,11 @@ class Admin extends BlogPad {
                         exit;
                     }
 
+                    if($post['author'] !== User::get_info('username') ) {
+                        trigger_error('You cannot edit this post.', E_USER_ERROR);
+                        exit;
+                    }
+
                     $id = isset($post['id']) ? (int) $post['id']: 0;
 
                     $title = htmlentities($post['title'], ENT_QUOTES);
@@ -67,11 +84,14 @@ class Admin extends BlogPad {
 
                     $page_type = 'edit';
 
+                    $author = trim($post['author']);
+
                     self::load_part('posts/add_posts', array(
                         'id' => $id,
                         'title' => $title,
                         'categories' => $categories,
                         'description' => $description,
+                        'author' => $author,
                         'post' => $_post,
                         'date' => $date,
                         'slug' => $slug,
@@ -84,35 +104,26 @@ class Admin extends BlogPad {
 
                     self::load_part('afterhead', array('title' => 'Your Posts'));
 
-                    $user = 'Sharikul Islam';
-
-                    $found_filter_results = false;
-
-                    $have_posts = false;
-
                     $message = '';
 
-                    $posts = Post::get_posts_by($user);
+                    $posts = Post::get_posts_by( User::get_info('username') );
 
-                    if( !empty($posts) ) {
-                        $have_posts = true;
-                    }
-
-                    else {
+                    if( empty($posts) ) {
                         $message = 'You have not added any posts. Click the "Add a Post" button above!';
-                    } 
+                    }
 
                     // Handle filters - filter by title
                     if( isset($_GET['filter_by'] ) && !empty($_GET['filter_by']) ) {
-                        $posts = Post::filter_through_posts('title', trim($_GET['filter_by']));
+                        $filtered_posts = Post::filter($posts, 'title', trim($_GET['filter_by']));
 
-                        if( !empty($posts) ) {
-                            $found_filter_results = true;
+                        if( empty($filtered_posts) ) {
+                            $message = 'There are no posts whose title matches this filter. Click "remove filter" from above to renew your search.';
                         }
 
                         else {
-                            $message = 'There are no posts whose title matches this filter. Click "remove filter" from above to renew your search.';
+                            $posts = $filtered_posts;
                         }
+
                     }
 
                     $current_page = ( isset($_GET['pagenum'] ) ) ? (int) $_GET['pagenum']: 1;
@@ -123,7 +134,7 @@ class Admin extends BlogPad {
                         'posts' => $paginate['set'], 
                         'show_next_page' => (bool) $paginate['has_next_page'],
                         'show_prev_page' => (bool) $paginate['has_prev_page'],
-                        'have_posts' => $have_posts,
+                        'have_posts' => !empty($posts),
                         'message' => $message,
                         'current_page' => $current_page
                     ));
@@ -187,7 +198,7 @@ class Admin extends BlogPad {
         // Check that the title of the post provided hasn't already been assigned to another post.
         if( Post::is_title($title) ) {
 
-            // The form sent can be filled with updated data. Therefore if the Id of the current post and the matched post are the same, proceed with the updated, else error.
+            // The form sent can be filled with updated data. Therefore if the Id of the current post and the matched post are the same, proceed with the update, else error.
             $get_by_title = Post::get_post_by_title( trim($title) );
 
             if( $get_by_title[0]['id'] !== $id ) {
@@ -198,7 +209,7 @@ class Admin extends BlogPad {
         // Check that the slug provided isn't in use
         if( Post::is_slug($slug) ) {
 
-            // The form sent can be filled with updated data. Therefore if the Id of the current post and the matched post are the same, proceed with the updated, else error.
+            // The form sent can be filled with updated data. Therefore if the Id of the current post and the matched post are the same, proceed with the update, else error.
             $get_slug = Post::get_post_by_slug( trim($slug) );
 
             if( $get_slug[0]['id'] !== $id ) {
@@ -240,7 +251,7 @@ class Admin extends BlogPad {
                                 ':title' => $title,
                                 ':post' => $post,
                                 ':description' => $description,
-                                ':author' => $author,
+                                ':author' => User::get_info('username'),
                                 ':date' => date('Y-m-d G:i:s'),
                                 ':slug' => $slug,
                                 ':categories' => self::list_to_ser($categories)
@@ -257,7 +268,7 @@ class Admin extends BlogPad {
                                 'title' => $title,
                                 'post' => $post,
                                 'description' => $description,
-                                'author' => $author,
+                                'author' => User::get_info('username'),
                                 'updated' => date('Y-m-d G:i:s'),
                                 'slug' => $slug,
                                 'categories' => self::list_to_ser($categories)

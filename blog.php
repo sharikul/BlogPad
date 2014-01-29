@@ -18,24 +18,14 @@ return array(
 	// if true, BlogPad will automatically link post title's to a URL.
 	'auto_link' => true,
 
-	// In this array is where hard-coded categories reside.
+	// Categories go in this array. Format: 'name' => 'description'
 	'categories' => array(
 
-		'Random' => array(
-			'description' => 'A collection of random posts which have been plucked out of thin air.'
-		),
+		'Random' => 'A collection of random posts which have been plucked out of thin air.',
 
-		'Sharikul' => array(
-			'description' => 'All Posts related to sharikul.'
-		),
+		'Sharikul' => 'All Posts related to sharikul.',
 
-		'Static' => array(
-			'description' => 'Static post'
-		),
-
-		'Rahan' => array(
-			'description' => 'Rahan'
-		)
+		'Static' => 'Static post'
 	),
 
 	// Provide a path to the static posts directory here.
@@ -47,13 +37,21 @@ return array(
 
 	'post_sort_type' => 'desc',
 
+	// Login accounts go here. Format: 'username' => extended info array. Should contain first and last name, username + password (crypted)
 	'accounts' => array(
 
 		'sharikul' => array(
 			'firstname' => 'Sharikul',
 			'lastname' => 'Islam',
 			'username' => 'sharikul',
-			'password' => 'sex',
+			'password' => '$1$F84.qL3.$7RVg43fG5/hwhdVLTLpxx0',
+		),
+
+		'jakirul' => array(
+			'firstname' => 'Jakirul',
+			'lastname' => 'Islam',
+			'username' => 'jakirul',
+			'password' => '$1$rr1.YF3.$CZrCQZ.jFUNyYgtGr2Iir0'
 		)
 	)
 

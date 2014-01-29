@@ -7,7 +7,7 @@ class Post extends BlogPad {
     }
 
     static function can_db_post() {
-        return !is_null( self::get_setting('database') );
+        return !is_null( self::get_setting('database') ) && Query::connected() !== false;
     }
 
     static function is_static_post($slug = null) {
@@ -26,13 +26,19 @@ class Post extends BlogPad {
     }
 
     static function get_categories() {
-        $categories = array();
 
-        foreach( self::get_setting('categories') as $category => $meta ) {
-            $categories[] = $category;
+        if( self::has_setting('categories') ) {
+
+            $categories = array();
+
+            foreach( self::get_setting('categories') as $category => $meta ) {
+                $categories[] = $category;
+            }
+
+            return $categories;
         }
 
-        return $categories;
+        return null;
     }
 
     /**
@@ -45,16 +51,32 @@ class Post extends BlogPad {
         return ( self::has_setting('posts_per_page') ) && is_numeric( self::get_setting('posts_per_page') ) ? (int) self::get_setting('posts_per_page'): $default;
     }
 
-    static function filter_through_posts($key = null, $value = null, $exactly = false) {
-        if( is_null($key) || is_null($value) ) {
-            trigger_error('To filter through posts, please provide a key and a value to match against.', E_USER_ERROR);
-            exit;
+    static function filter() {
+
+        $args = func_get_args();
+
+        if( is_array($args[0]) ) {
+            $posts = $args[0];
+
+            $key = $args[1];
+            $value = $args[2];
+
+            $exactly = isset($args[3]) && is_bool($args[3]) ? $args[3]: false;
+        }
+
+        else {
+            $posts = self::get_all_posts();
+
+            $key = $args[0];
+            $value = $args[1];
+
+            $exactly = isset($args[2]) && is_bool($args[2]) ? $args[2]: false; 
         }
 
         $filtered_set = array();
 
         // Loop through the $posts array, and store filtered matches to $filtered_set
-        foreach( self::get_all_posts() as $index => $post ) {
+        foreach( $posts as $index => $post ) {
 
             // Just make sure that the key even exists before continuing
             if( !array_key_exists($key, $post) ) {
@@ -123,6 +145,9 @@ class Post extends BlogPad {
                     // Add when the post was updated using filemtime
                     $posts[ count($posts) - 1]['updated'] = filemtime($dir.'/'.$static_post);
 
+                    // Additional space before the author's name can pose problems, thus rid them here.
+                    $posts[ count($posts) - 1]['author'] = trim( $posts[ count($posts) - 1]['author'] );
+
                 }   
             }
 
@@ -143,7 +168,7 @@ class Post extends BlogPad {
 
         $get_posts = Query::run('SELECT * FROM posts');
 
-        if( !is_null( $get_posts ) ) {
+        if( $get_posts ) {
 
             // MYSQL queries return associative and numerical keys, so let's get rid of them here.
             foreach( $get_posts as $index => $post ) {
@@ -190,24 +215,59 @@ class Post extends BlogPad {
 
     static function get_all_posts() {
 
-        $get_static_posts = self::get_static_posts();
+        // Cache the cache call!
+        $cache = Cache::init();
 
-        $get_db_posts = self::get_db_posts();
+        $static_posts = $cache->get('static_posts');
 
-        $posts = array();
+        $db_posts = $cache->get('db_posts');
 
-        if( !empty( $get_static_posts ) && !empty( $get_db_posts ) ) {
-            $posts = array_merge( self::get_static_posts(), self::get_db_posts());
+        if( is_null($static_posts) ) {
+            $static_posts = self::get_static_posts();
+
+            // Store data in the cache for 5 minutes
+            $cache->set('static_posts', serialize($static_posts), 300);
+        }
+
+        else if( is_null($db_posts) ) {
+            $db_posts = self::get_db_posts();
+
+            $cache->set('db_posts', serialize($db_posts), 300);
         }
 
         else {
 
-            if( !empty( $get_static_posts ) ) {
-                $posts = array_merge($get_static_posts, $posts);
+            if( $static_posts !== serialize(self::get_static_posts() )) {
+                $static_posts = self::get_static_posts();
+
+                // Recache new array
+                $cache->set('static_posts', serialize($static_posts), 300);
             }
 
-            else if( !empty( $get_db_posts) ) {
-                $posts = array_merge($get_db_posts, $posts);
+            else if( $db_posts !== serialize(self::get_db_posts() )) {
+                $db_posts = self::get_db_posts();
+
+                $cache->set('db_posts', serialize($db_posts), 300);
+            }
+        }
+
+        $static_posts = ( !is_array($static_posts) ) ? unserialize($static_posts): $static_posts;
+        $db_posts = ( !is_array($db_posts) ) ? unserialize($db_posts): $db_posts;
+
+        $posts = array();
+
+        if( !empty( $static_posts ) && !empty( $db_posts ) ) {
+            $posts = array_merge( $static_posts, $db_posts );
+        }
+
+        else {
+
+            if( !empty( $static_posts ) ) {
+                $posts = array_merge($static_posts, $posts);
+            }
+
+            else if( !empty( $db_posts) ) {
+                $posts = array_merge($db_posts, $posts);
             }
         }
 
@@ -215,13 +275,12 @@ class Post extends BlogPad {
 
             $dates = array();
 
+            // $dates will be used later on to sort posts by ascending or descending order
             foreach( $posts as $post ) {
                 $dates[] = $post['date'];
             }
 
-            $sort_type = self::get_setting('sort_type', 'DESC');
-
-            $sort = ( strtoupper($sort_type) === 'DESC' ) ? SORT_DESC: SORT_ASC; 
+            $sort = ( strtoupper( self::get_setting('post_sort_type', 'DESC') ) === 'DESC' ) ? SORT_DESC: SORT_ASC; 
 
             // Sort by date now.
             array_multisort($dates, $sort, $posts);
@@ -230,7 +289,7 @@ class Post extends BlogPad {
         }
 
         else {
-            return false;
+            return null;
         }
     }
 
@@ -240,7 +299,7 @@ class Post extends BlogPad {
             exit;
         }
 
-        return self::filter_through_posts('author', $user);
+        return self::filter('author', $user, true);
     }
 
     static function get_post_by_title($title = null) {
@@ -249,7 +308,7 @@ class Post extends BlogPad {
             exit;
         }
 
-        $post = self::filter_through_posts('title', trim($title), true);
+        $post = self::filter('title', trim($title), true);
 
         return ( !empty($post) ) ? $post: null;
     }
@@ -274,7 +333,7 @@ class Post extends BlogPad {
 
         $slug = trim($slug);
 
-        $post = self::filter_through_posts('slug', $slug);
+        $post = self::filter('slug', $slug);
 
         return ( !empty($post) ) ? $post: null;
     }
@@ -291,7 +350,7 @@ class Post extends BlogPad {
             exit;
         }
 
-        return ( self::filter_through_posts('title', trim($title), true) ) ? true: false;
+        return ( self::filter('title', trim($title), true) ) ? true: false;
     }
 
     /**
@@ -306,7 +365,7 @@ class Post extends BlogPad {
             exit;
         }
 
-        return ( self::filter_through_posts('slug', trim($slug), true) ) ? true: false;
+        return ( self::filter('slug', trim($slug), true) ) ? true: false;
     }
 
     static function get_title_of_slug($slug = null) {

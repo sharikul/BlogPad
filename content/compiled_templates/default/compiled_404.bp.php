@@ -20,6 +20,16 @@
 				<li>Email</li>
 			</ul>
 		</header>
+
+		<form id="form" method="POST">
+			<input type="text" name="s" id="s">
+		</form>
+
+		<script>
+			document.getElementById('s').onkeyup = function() {
+				document.getElementById('form').setAttribute('action', '<?php echo $homepage; ?>/search/' + this.value + '/');
+			}
+		</script>
 	<h1>If that was a post you were looking for, that doesn't exist &mdash; unfortunately! <a href="<?php echo $homepage; ?>">Go to the homepage?</a></h1>
 <h3>From the footer!</h3>
 </body>

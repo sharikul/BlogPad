@@ -95,6 +95,10 @@ body#postpage {
   background: #f8f8e8;
 }
 
+html, body {
+  height: 100%;
+}
+
 .standard {
   color: #14716c;
 }
@@ -155,15 +159,11 @@ header li {
   content: "\e600";
 }
 
-.icon-file:before {
-  content: "\e601";
-}
-
-.icon-paint-format:before {
+.icon-note:before {
   content: "\e602";
 }
 
-.icon-info:before {
+.icon-shop:before {
   content: "\e603";
 }
 
@@ -180,6 +180,7 @@ header li {
   margin-top: 15px;
   cursor: pointer;
   display: inline-block;
+  outline: none;
 }
 .button.alternative {
   background: #1c9c95;
@@ -264,7 +265,8 @@ header li {
   width: 95%;
   margin: 20px;
   box-shadow: 9px 6px 10px #fafafa;
-  border: 1px solid lightgray;
+  border: 1px solid #ececec;
+  height: 100%;
 }
 #modal_preview h3 {
   border-bottom: 1px solid lightgray;
@@ -272,7 +274,7 @@ header li {
 }
 #modal_preview iframe {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
 }
 
 #catlist {
@@ -363,4 +365,7 @@ article p {
 
 #paginator {
   text-align: center;
+}
+#paginator a {
+  text-decoration: none;
 }

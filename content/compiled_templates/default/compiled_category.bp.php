@@ -21,6 +21,16 @@
 			</ul>
 		</header>
 
+		<form id="form" method="POST">
+			<input type="text" name="s" id="s">
+		</form>
+
+		<script>
+			document.getElementById('s').onkeyup = function() {
+				document.getElementById('form').setAttribute('action', '<?php echo $homepage; ?>/search/' + this.value + '/');
+			}
+		</script>
+
 <header style="background-color: lavender">
 	<h1 style="padding: 15px; font-family: sans-serif;text-align: center;"><?php echo $metadata['title']; ?></h1>
 	<h3 style="font-family: sans-serif;text-align: center;color:lightblue;margin: 1px"><?php echo $metadata['description']; ?></h1>
@@ -33,7 +43,7 @@
 			<h4><?php echo $post['excerpt']; ?></h1>
 		</article>
 		<br>
-	<?php endforeach; else: echo 'Go away!'; endif; ?>
+	<?php endforeach; else: echo BlogPad::get_setting('no_post_message', 'Nothing to see here!'); endif; ?>
 
 	<div class="bp-pagination">
 

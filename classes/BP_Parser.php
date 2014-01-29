@@ -48,53 +48,11 @@ class BP_Parser extends BlogPad {
 
 			$struct = array();
 
-			preg_match('/{\- BEGIN METADATA \-}(.*?){\- END METADATA \-}/s', $contents, $meta);
-
-			if( empty($meta) ) {
-				trigger_error("No metadata declaration found in $filepath.", E_USER_ERROR);
-				exit;
-			}
-
-			preg_match_all('/{\- (NAME|AUTHOR|WEBSITE|RELEASE|SCREENSHOT|COMMENTS|NOTES)\: (.*?) \-}/', $meta[0], $metadata);
-
-			if( !empty($metadata[0]) ) {
-
-				$meta_data = array();
-
-				$required = array(
-					'NAME',
-					'AUTHOR',
-					'WEBSITE',
-					'RELEASE',
-					'SCREENSHOT'
-				);
-
-				foreach( $required as $req ) {
-					if( !in_array($req, $metadata[1]) ) {
-						return;
-					}
-
-					else {
-						foreach( $metadata[1] as $index => $data ) {
-							$meta_data[$data] = $metadata[2][$index];
-						}
-					}
-				}
-
-				$struct['metadata'] = $meta_data;
-
-			} 
-
-			else {
-				trigger_error("Couldn't find metadata declarations in $filepath.", E_USER_ERROR);
-				exit;
-			}
-
 			preg_match_all('/{\- BEGIN FILES \-}(.*?){\- END FILES \-}/s', $contents, $_struct);
 
 			foreach( $_struct[1] as $declaration ) {
 
-				preg_match_all('/{\- (HOMEPAGE|STYLESHEET|POST|PROFILE|CATEGORY|URL_STRUCT|ERROR)\: (.*?) \-}/', $declaration, $file_struct);
+				preg_match_all('/{\- (HOMEPAGE|STYLESHEET|POST|PROFILE|CATEGORY|URL_STRUCT|ERROR|SEARCH)\: (.*?) \-}/', $declaration, $file_struct);
 
 				if( !empty($file_struct) ) {				
 
@@ -174,6 +132,8 @@ class BP_Parser extends BlogPad {
 					'CATEGORY' => 'word=$1&pagenum=$2',
 					'POST' => '_post=$1',
 					'HOMEPAGE' => 'pagenum=$1',
+					'PROFILE' => 'username=$1&pagenum=$2',
+					'SEARCH' => 'query=$1&pagenum=$2'
 				);
 
 				foreach( $definitions[1] as $index => $url ) {
@@ -452,7 +412,7 @@ class BP_Parser extends BlogPad {
 
 	protected static function handle_categories($content) {
 
-		$before = '<?php $catlist = BlogPad::ser_to_list($post["categories"]); foreach( explode(",", $catlist) as $category): ?>';
+		$before = '<?php $catlist = BlogPad::ser_to_list($post["categories"]); foreach( (strpos($catlist, ",") ? explode(",", $catlist): array($catlist) ) as $category): ?>';
 
 		$after = '<?php endforeach; ?>';
 
@@ -534,11 +494,9 @@ class BP_Parser extends BlogPad {
 		// $posts or $post? 
 		$is_s = isset($post_loop_block[1]) && strtoupper( trim($post_loop_block[2]) ) === 'S';
 
-		$no_post_message = self::get_setting('no_post_message', 'Nothing to see here!');
-
 		if( !empty($post_loop_block[0]) ) {
 			
-			$_content = preg_replace('/{\- (excerpt|date|slug|description|updated) \-}/', '<?php echo $post[\'$1\']; ?>', $post_loop_block[0]);
+			$_content = preg_replace('/{\- (excerpt|date|slug|description|updated|author) \-}/', '<?php echo $post[\'$1\']; ?>', $post_loop_block[0]);
 
 			if( self::has_setting('auto_link', true) ) {
 
@@ -553,7 +511,7 @@ class BP_Parser extends BlogPad {
 
 			$_content = str_replace('{- BEGIN POST'.( ($is_s) ? 'S': '').' -}', '<?php if( !empty($post'.( ($is_s) ? 's': '').') ): '.( ($is_s) ? 'foreach($posts as $post):' : '').' ?>', $_content);
 
-			$_content = str_replace('{- END POST'.( ($is_s) ? 'S': '').' -}', '<?php '.( ($is_s) ? 'endforeach; else: ': 'else: ')."echo '$no_post_message'; endif; ?>", $_content);
+			$_content = str_replace('{- END POST'.( ($is_s) ? 'S': '').' -}', '<?php '.( ($is_s) ? 'endforeach; else: ': 'else: ')."echo BlogPad::get_setting('no_post_message', 'Nothing to see here!'); endif; ?>", $_content);
 
 
 			// Now parse date and categories calls
@@ -605,10 +563,10 @@ class BP_Parser extends BlogPad {
 			}
 
 			// Support the placement of custom text that will be used as a label, else display the relevant page numbers.
-			$rplace = preg_replace('/(.*?){- previous:?([A-z0-9\s]+)? -}(.*)/', '<?php if($pagenum - 1 !== 0): ?>$1'.($autolink ? '<a href="<?php echo Link_Parser::generate_link(BlogPad::$current_file, array("num" => $pagenum - 1));?>"><?php echo (trim("$2") !== "") ? "$2": $pagenum - 1;?></a>': '<?php echo (trim("$2" !== "")) ? "$2": $pagenum - 1;?>').'$3<?php endif;?>', $txt);
+			$rplace = preg_replace('/(.*?){- previous:?([A-z0-9\s]+)? -}(.*)/', '<?php if( !($pagenum - 1 <= 0) ): ?>$1'.($autolink ? '<a href="<?php echo Link_Parser::generate_link(BlogPad::$current_file, array("num" => $pagenum - 1, "word" => (isset($word)) ? $word: ""));?>"><?php echo (trim("$2") !== "") ? "$2": $pagenum - 1;?></a>': '<?php echo (trim("$2" !== "")) ? "$2": $pagenum - 1;?>').'$3<?php endif;?>', $txt);
 
 
-			$rplace = preg_replace('/(.*?){- next:?([A-z0-9\s]+) -}(.*)/', '<?php if($pagenum + 1 <= $paginate["last_page"] + 1): ?>$1'.($autolink ? '<a href="<?php echo Link_Parser::generate_link(BlogPad::$current_file, array("num" => $pagenum + 1));?>"><?php echo (trim("$2") !== "") ? "$2": $pagenum + 1;?></a>': '<?php echo (trim("$2" !== "")) ? "$2": $pagenum + 1;?>').'$3<?php endif;?>', $rplace);
+			$rplace = preg_replace('/(.*?){- next:?([A-z0-9\s]+)? -}(.*)/', '<?php if($pagenum + 1 > 1 && $pagenum < $paginate["last_page"]): ?>$1'.($autolink ? '<a href="<?php echo Link_Parser::generate_link(BlogPad::$current_file, array("num" => $pagenum + 1, "word" => (isset($word)) ? $word: ""));?>"><?php echo (trim("$2") !== "") ? "$2": $pagenum + 1;?></a>': '<?php echo (trim("$2") !== "") ? "$2": $pagenum + 1;?>').'$3<?php endif;?>', $rplace);
 
 			$p_processed .= $rplace;
 

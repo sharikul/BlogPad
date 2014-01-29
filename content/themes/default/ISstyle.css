@@ -11,8 +11,15 @@ pre, code {
 }
 
 .bp-countdown {
-    background: whitesmoke;
     display: inline-block !important;
+    width: 50%;
+}
+
+.bp-countdown li {
+    display: inline-block;
+    padding: 10px;
+    background: lightgray;
+    border-radius: 10px;
 }
 
 .cat {

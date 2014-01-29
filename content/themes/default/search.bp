@@ -1,0 +1,12 @@
+{- GET 'header' -}
+<h1>Search results for "{- VAR query -}"</h1>
+
+{- BEGIN POSTS -}
+    <h1>{- title -}</h1>
+    <p>Posted on: {- date: %month%, %year% -}</p>
+{- END POSTS -}
+
+{- BEGIN PAGINATION -}
+    <li class="cat">{- previous:Previous -}</li>
+    <li class="cat">{- next:Next -}</li>
+{- END PAGINATION -}

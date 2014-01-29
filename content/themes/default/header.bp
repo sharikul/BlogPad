@@ -19,3 +19,13 @@
 				<li>Email</li>
 			</ul>
 		</header>
+
+		<form id="form" method="POST">
+			<input type="text" name="s" id="s">
+		</form>
+
+		<script>
+			document.getElementById('s').onkeyup = function() {
+				document.getElementById('form').setAttribute('action', '{- VAR homepage -}/search/' + this.value + '/');
+			}
+		</script>

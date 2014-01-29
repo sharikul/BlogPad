@@ -113,9 +113,14 @@
         window.categories += ", " + (this.innerText.trim());
       } else {
         categories[0].value += this.innerText.trim();
+        window.categories = this.innerText.trim();
       }
       return false;
     });
+  });
+
+  categories.keyup(function() {
+    return window.categories += $(this).val();
   });
 
   preview.click(function() {
@@ -127,9 +132,14 @@
         description: description.val().trim(),
         date: window.date,
         slug: slug.val().trim(),
-        categories: window.categories
-      }, function(prev) {
-        $('iframe').attr('srcdoc', prev);
+        categories: window.categories,
+        author: window.author
+      }, function(preview) {
+        var iframe;
+        iframe = $('iframe')[0].contentDocument;
+        iframe.open();
+        iframe.write(preview);
+        iframe.close();
         modal_preview.show('slow');
         return window.location = '#modal_preview';
       });

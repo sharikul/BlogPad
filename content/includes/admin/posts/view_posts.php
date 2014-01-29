@@ -1,7 +1,7 @@
 <script>
     var base = '<?php echo $_SERVER['REQUEST_URI'];?>';
 </script>
-<?php if($have_posts):?>
+<?php if($have_posts): ?>
 
 <section id="filter_form">
     <input type="text" id="filter_by" placeholder="Filter through posts by title" autocomplete="off" >
@@ -18,7 +18,7 @@
 <?php endif;?>
 
 <section id="posts">
-    <?php if(!empty($posts)): foreach($posts as $post): ?>
+    <?php if(!empty($posts) && empty($message)): foreach($posts as $post): ?>
     <article>
         <h2>
             <a href="?page=edit_post&post=<?php echo $post['slug'];?>" title="Edit <?php echo $post['title'];?>">
@@ -50,7 +50,7 @@
     <?php endif; ?>
 </section>
 
-<?php if( $have_posts && ($show_next_page || $show_prev_page) ): if($show_next_page && $current_page === 1):?>
+<?php if( $have_posts && empty($message) && ($show_next_page || $show_prev_page) ): if($show_next_page && $current_page === 1):?>
 <div id="paginator">
     <a href="<?php echo Link_Parser::current_url('pagenum', $current_page + 1);?>">
         <p class="button">Next page &raquo;</p>

@@ -6,18 +6,9 @@ class BlogPad {
 
 	static $to_load = '';
 
-	static $file_struct = '';
-
 	static $current_file = '';
 
-	static $pointers = array();
-
-	static $folder = '';
-
-	static $root = '';
-
 	static function load() {
-
 
 		set_error_handler('self::throw_error');
 
@@ -62,8 +53,6 @@ class BlogPad {
 
 		$struct = self::get_url_struct();
 
-		self::$file_struct = $structure;
-
 		if( empty($structure) ) {
 			trigger_error("BlogPad couldn't find structures in $folder/struct.bpd.", E_USER_ERROR);
 			exit;
@@ -82,9 +71,7 @@ class BlogPad {
 
 		$pointers = self::get_pointers();
 
-		self::$pointers = $pointers;
-
-		// At this point of execution, Link_Parser will have access to necessary properties, e.g. $pointers
+		// Link_Parser will populate self::$vars as well as insert a pointer in self::$to_load
 		Link_Parser::load();
 
 		if( !empty(self::$to_load) ) {
@@ -202,9 +189,13 @@ class BlogPad {
 
 		extract($params);
 
-		$stylesheet = self::$pointers['STYLESHEET'];
+		$pointers = self::get_pointers();
+
+		$stylesheet = $pointers['STYLESHEET'];
 
 		$settings = self::get_blog_settings();
+
+		$homepage = self::get_blog_homepage();
 
 		switch( self::$current_file ) {
 			case 'CATEGORY':
@@ -220,7 +211,7 @@ class BlogPad {
 				}
 
 				$metadata['title'] = trim($category);
-				$metadata['description'] = $settings['categories'][$category]['description'];
+				$metadata['description'] = $settings['categories'][$category];
 
 				foreach( Post::get_all_posts() as $post ) {
 
@@ -240,13 +231,13 @@ class BlogPad {
 
 				$posts = $paginate['set'];
 
-				include self::$pointers['CATEGORY'];
+				include $pointers['CATEGORY'];
 
 			break;
 
 			case 'POST':
 
-				$post = Post::filter_through_posts('slug', $_post, true);
+				$post = Post::filter('slug', $_post, true);
 
 				if( empty( $post ) ) {
 					self::four_o_four();
@@ -261,7 +252,7 @@ class BlogPad {
 				$metadata['title'] = $title;
 				$metadata['description'] = $post['description'];
 
-				include self::$pointers['POST'];
+				include $pointers['POST'];
 
 			break;
 
@@ -275,12 +266,53 @@ class BlogPad {
 
 				$posts = $paginate['set'];
 
-				include self::$pointers['HOMEPAGE'];
+				include $pointers['HOMEPAGE'];
 
 			break;
 
+			case 'PROFILE':
+
+				if( $pagenum === '' ) {
+					$pagenum = 1;
+				}
+
+				$paginate = self::paginate(Post::get_posts_by($username), $pagenum);
+
+				$posts = $paginate['set'];
+
+				if( empty($posts) ) {
+					self::four_o_four();
+				}
+
+				// for pagination
+				$word = $username;
+
+				$title = "$username's profile";
+
+				include $pointers['PROFILE'];
+
+			break;
+
+			case 'SEARCH':
+
+				// for pagination
+				$word = $query;
+
+				if( $pagenum === '' ) {
+					$pagenum = 1;
+				}
+
+				$paginate = self::paginate( Post::filter('title', $query), $pagenum );
+
+				$posts = $paginate['set'];
+
+				$title = "Search results for '$query'";
+
+				include $pointers['SEARCH'];
+			break;
+
 			default:
-				include self::$pointers['HOMEPAGE'];
+				include $pointers['HOMEPAGE'];
 			break;
 
 		}
@@ -357,7 +389,7 @@ class BlogPad {
 		return array(
 			'set' => array_slice($posts, $starting_point, $max_posts),
 			'has_next_page' => !( $current_page >= $last_page ),
-			'has_prev_page' => $current_page <= (int) $last_page,
+			'has_prev_page' => $last_page > 1 && $current_page <= (int) $last_page,
 			'last_page' => $last_page
 		);
 	}
@@ -409,7 +441,9 @@ class BlogPad {
 
 	static function four_o_four($message = 'Sorry, you have made an error.', $show_error = true, array $params = array() ) {
 
-		$stylesheet = self::$pointers['STYLESHEET'];
+		$pointers = self::get_pointers();
+
+		$stylesheet = $pointers['STYLESHEET'];
 
 		// Store the path to the homepage in a variable so that it can referenced in an error template.
 		extract(array('homepage' => self::get_blog_homepage()) );
@@ -424,7 +458,7 @@ class BlogPad {
 
 		// Some pages might not require an include of the error template, thus only show the page on true.
 		if( $show_error ) {
-			include self::$pointers['ERROR'];
+			include $pointers['ERROR'];
 			exit;
 		}
 

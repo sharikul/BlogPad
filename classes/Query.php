@@ -55,6 +55,14 @@
 			return version_compare( PHP_VERSION, '5.3.0', '>=' );
 		}
 
+		static function connected() {
+			if( is_null( self::connection() ) ) {
+				return false;
+			}
+
+			return self::connection()->getAttribute(PDO::ATTR_CONNECTION_STATUS);
+		}
+
 		/**
 		 * Check whether Query.php can run on the current version of PHP.
 		 *
@@ -244,10 +252,9 @@
 
 		static function _query( $column = '', $table = '', array $extra_options = null ) {
 
-			if ( !self::$setup_complete ) {
+			if ( !self::$setup_complete || !self::connected() ) {
 				return false;
 			}
-
 
 			$query = '';
 
@@ -436,7 +443,7 @@
 						}
 
 						catch ( Exception $error ) {
-							die($error->getMessage() );
+							return;
 						}
 					}
 
@@ -451,7 +458,7 @@
 							}
 
 							catch ( Exception $error ) {
-								die( $error->getMessage() );
+								return;
 							}
 						}
 					}

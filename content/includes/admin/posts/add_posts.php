@@ -60,14 +60,14 @@ if( isset($_POST['p_slug']) ) {
                 'title' => $post_title,
                 'post' => $post_content,
                 'description' => $post_description,
-                'author' => 'Sharikul Islam',
+                'author' => User::get_info('username'),
                 'date' => date('Y-m-d G:i:s'),
                 'slug' => $post_slug,
                 'categories' => $post_categories
             ));
 
             if( !is_array( $insert ) ) {
-                $messages[] = "<em>$post_title</em> has been successfully published! <a href='".Link_Parser::generate_link('post', array('slug' => $post_slug))."'>View it now!</a>";
+                $messages[] = sprintf('<em>%s</em> has been successfully published! <a href="%s">View it now!</a>', $post_title, Link_Parser::generate_link('post', array('slug' => $post_slug)) );
             }
 
             else {
@@ -86,7 +86,7 @@ if( isset($_POST['p_slug']) ) {
                 'title' => $post_title,
                 'post' => $post_content,
                 'description' => $post_description,
-                'author' => 'Sharikul Islam',
+                'author' => User::get_info('username'),
                 'date' => date('Y-m-d G:i:s', $date),
                 'slug' => $post_slug,
                 'categories' => $post_categories
@@ -112,7 +112,7 @@ if( isset($_POST['p_slug']) ) {
                 'title' => $post_title,
                 'post' => $post_content,
                 'description' => $post_description,
-                'author' => 'Sharikul Islam',
+                'author' => User::get_info('username'),
                 'slug' => $post_slug,
                 'categories' => $post_categories
             ));
@@ -141,7 +141,7 @@ if( isset($_POST['p_slug']) ) {
                 'title' => $post_title,
                 'post' => $post_content,
                 'description' => $post_description,
-                'author' => 'Sharikul Islam',
+                'author' => User::get_info('username'),
                 'slug' => $post_slug,
                 'categories' => $post_categories
             ));
@@ -185,8 +185,9 @@ if( isset($_POST['p_slug']) ) {
 <script>
     var page_type = '<?php echo $page_type;?>',
         post_type = '<?php echo isset($post_type) ? $post_type: '';?>',
-        date = <?php if(!empty($date)): echo $date; else: ?>''<?php endif;?>;
-        categories = '<?php echo isset($categories) ? $categories: '';?>';
+        date = <?php if(!empty($date)): echo $date; else: ?>''<?php endif;?>,
+        categories = '<?php echo isset($categories) ? $categories: '';?>',
+        author = '<?php echo isset($author) ? $author: 'Sharikul';?>';
 </script>
 <div id="modal_preview">
 
@@ -198,7 +199,7 @@ if( isset($_POST['p_slug']) ) {
         <a href="#" class="standard" id="close_modal" title="Close the Preview">Close</a>
     </h3>
 
-    <iframe src="about:blank" sandbox seamless></iframe>
+    <iframe src="about:blank" seamless></iframe>
 </div>
 <?php if( !empty($messages) ):?>
 <div id="messages">
@@ -224,22 +225,22 @@ if( isset($_POST['p_slug']) ) {
 
     <div id="toolbox">
         <div class="container">
-            <h2>Add Metadata &amp; <?php echo ( $page_type === 'new' ) ? 'Publish': 'Save';?> Your Post</h2>
+            <h2><?php echo ( $page_type === 'new' ) ? 'Add': 'Edit';?> Metadata &amp; <?php echo ( $page_type === 'new' ) ? 'Publish': 'Save';?> Your Post</h2>
             <p class="standard">Extend and save your post.</p>
             <br>
 
             <label for="categories" class="standard">Categories:</label><br>
-            <input type="text" name="p_categories" id="categories" <?php echo ( isset($categories) ) ? "value='$categories'": '';?> placeholder="Separate by commas." required>
+            <input type="text" name="p_categories" id="categories" <?php echo ( isset($categories) ) ? "value='$categories'": '';?> placeholder="Separate by commas." readonly required>
 
             <div id="catlist">
                 <p>Your <abbr title="These are your categories that you've defined in blog.php">categories</abbr>: </p>
                 <ul>
 
-                <?php foreach(Post::get_categories() as $category): ?>
+                <?php if( !is_null(Post::get_categories()) ): foreach(Post::get_categories() as $category): ?>
                     <li class="category" title="Click to add '<?php echo $category;?>'">
                         <a href="#"><?php echo $category;?></a>
                     </li>
-                <?php endforeach;?>
+                <?php endforeach; else: echo '<li class="category">You have not defined any categories!</li>'; endif;?>
                 </ul>
             </div>
             <br>

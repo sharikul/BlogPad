@@ -3,6 +3,7 @@
 {- BEGIN POST -}
 
 	<h1>{- title -}</h1>
+    <p>Posted by {- author -}</p>
     <h3>{- description -}</h3>
 
 	<time datetime="{- date: %date%-%month%-%year% -}">Posted on {- date: %date% %month%, %year% -}</time>

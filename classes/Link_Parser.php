@@ -28,9 +28,9 @@ class Link_Parser extends BlogPad {
 
 					foreach( explode('&', $params) as $query ) {
 						
-						$_explode = explode('=', $query);
+						$explode = explode('=', $query);
 
-						self::$vars[ $_explode[0] ] = $_explode[1];
+						self::$vars[ $explode[0] ] = $explode[1];
 					}
 				}
 
@@ -46,8 +46,7 @@ class Link_Parser extends BlogPad {
 			trigger_error('Please specify a struct.', E_USER_ERROR);
 			exit;
 		}
-
-		$_struct = self::get_url_struct(true);
+		
 		$url = self::get_blog_homepage();
 
 		$convs = array(
@@ -56,7 +55,7 @@ class Link_Parser extends BlogPad {
 			'%num%' => isset($options['num'])? (int) $options['num']: 0
 		);
 
-		foreach( $_struct as $_url => $meta ) {
+		foreach( self::get_url_struct(true) as $_url => $meta ) {
 
 			if( strtoupper($meta['template']) === strtoupper($struct) ) {
 				
@@ -107,8 +106,8 @@ class Link_Parser extends BlogPad {
 
 		if( !is_null($key) && !is_null($value) ) {
 
-			if( preg_match("/$key=[\w\W]+/", $url) ) {
-				$url = preg_replace("/$key=[\w\W]+/", "$key=$value", $url);
+			if( preg_match("/$key=[\w\-%_.+!*'\"()]+/", $url, $x) ) {
+				$url = preg_replace("/$key=[\w\-%_.+!*'\"()]+/", "$key=$value", $url);
 			}
 
 			else {

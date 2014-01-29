@@ -10,6 +10,10 @@ body {
     }
 }
 
+html, body {
+    height: 100%;
+}
+
 .standard {
     color: darken(lightseagreen, 15%);
 }
@@ -81,15 +85,13 @@ header {
 .icon-pen:before {
     content: "\e600";
 }
-.icon-file:before {
-    content: "\e601";
-}
-.icon-paint-format:before {
+.icon-note:before {
     content: "\e602";
 }
-.icon-info:before {
+.icon-shop:before {
     content: "\e603";
 }
+
 
 .button {
     border-radius: 5px;
@@ -106,6 +108,7 @@ header {
     margin-top: 15px;
     cursor: pointer;
     display: inline-block;
+    outline: none;
 
     &.alternative {
         background: darken(lightseagreen, 5%);

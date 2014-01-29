@@ -108,7 +108,12 @@ _catlist.each (index, value) ->
             window.categories += ", #{@innerText.trim()}"
         else
             categories[0].value += @innerText.trim()
+
+            window.categories = @innerText.trim()
         no
+
+categories.keyup ->
+    window.categories += $(this).val()
 
 preview.click ->
 
@@ -123,9 +128,14 @@ preview.click ->
             date: window.date
             slug: slug.val().trim()
             categories: window.categories
+            author: window.author
             
-            (prev) ->
-                $('iframe').attr 'srcdoc', prev
+            (preview) ->
+                iframe = $('iframe')[0].contentDocument
+                iframe.open()
+                iframe.write preview 
+                iframe.close()
+
                 modal_preview.show 'slow'
                 window.location = '#modal_preview'
 
