@@ -3,7 +3,7 @@ It's very simple to edit posts in BlogPad. Simply click the 'View Posts' tab and
 
 For this example, we'll edit the demo post "I wrote this post in Internet Explorer".
 
-![](http://i.imgur.com/uicO3iu.png)
+![](http://i.imgur.com/gsqXiRM.png)
 
 In this screen, you also have the ability to delete a post.
 
