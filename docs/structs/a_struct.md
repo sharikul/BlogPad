@@ -4,6 +4,16 @@ A 'struct' is a BlogPad terminology meaning _structure_. A struct organises sect
 ## Meet the Structs
 BlogPad uses 3 structs - the **_file struct_**, the **_URL struct_** and the **_post struct_**. More times than ever, you are more likely to make use of the post struct. If you're developing a theme, then you'll also make use of the file and URL struct's. 
 
+### The different extensions
+In a theme, different files use unique extensions. In this table, you can see the different extensions, when they should be used and some further information.
+
+| Extension | When to be used | Further information |
+| --------- | --------------- | ------------------- |
+| `.bpd`    | When indicating struct files. such as the URL and file structs. | Stands for _BlogPad Definitions_.         |
+| `.bp`     | When indicating a template file, such as the homepage. | Stands for _BlogPad_. |
+| `.bpp`    | To indicate a BlogPad **static post**. | Stands for _BlogPad Post_. |
+               
+
 ### The file struct
 The file struct is the struct that provides pointers to BlogPad for a certain theme. This ensures that theme developers aren't locked in naming conventions. However, for any theme, the file struct must be located in a file called `struct.bpd`. Here's an example struct:
 
@@ -30,9 +40,7 @@ Just incase you're wondering, here is the file structure for the demo theme whos
   - posts/
     - category.bp
     - post.bp
+  - struct.bpd
   - url_struct.bpd
   - user_profile.bp
 ```
-
-### .bp and .bpd
-You've probably noticed that a variety of files have different extensions attached to them. While it's easy to understand why the `.css` extension is attached to the `STYLESHEET` pointer, it probably might not be easy to understand why certain files are appended with either `.bp` or the `.bpd` extensions.
