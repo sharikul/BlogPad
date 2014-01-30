@@ -23,4 +23,4 @@ When you learn more about structs (_this is a post struct_), you'll find out tha
 
 You may have noticed that there is no way of providing a slug to your post. Since a static post is a file, the filename should contain the slug, separated by hyphens if required, like so: `my-post.bpp` or `post.bpp`. 
 
-The web editor also provides you with the ability to write an edit static posts and it will handle this templating for you.
+The web editor also provides you with the ability to create and edit static posts and it will handle this templating for you.
