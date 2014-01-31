@@ -16,13 +16,7 @@ class Post extends BlogPad {
             exit;
         }
 
-        foreach( self::get_static_posts() as $post ) {
-            if( $post['slug'] === trim($slug) ) {
-                return true;
-            }
-        }
-
-        return false;
+        return !empty( self::filter( self::get_static_posts(), 'slug', trim($slug) ) );
     }
 
     static function get_categories() {
@@ -129,24 +123,26 @@ class Post extends BlogPad {
 
                     // Parsing the post will return an array by default.
                     $posts[ count( $posts ) ] = BP_Parser::parse_bpp( $dir.'/'.$static_post);
+                    
+                    $post = $posts[ count( $posts ) - 1];
 
                     // The slug will be the name of the static post file. Remove the .bpp extension.
-                    $posts[ count( $posts ) - 1]['slug'] = preg_replace('/\.bpp$/', '', $static_post);
+                    $post['slug'] = preg_replace('/\.bpp$/', '', $static_post);
 
                     // Serialize categories if they can be exploded by commas, else add the category to an array and then serialize.
-                    $posts[ count($posts) - 1]['categories'] = self::list_to_ser($posts[count($posts) - 1]['categories']);
+                    $post['categories'] = self::list_to_ser($post['categories']);
 
                     // Remove html from the title and trim it as well.
-                    $posts[ count($posts) - 1]['title'] = trim( strip_tags( $posts[ count($posts) - 1 ]['title'] ));
+                    $post['title'] = trim( strip_tags( $post['title'] ));
 
                     // Add an excerpt key
-                    $posts[ count($posts) - 1]['excerpt'] = Parsedown::instance()->parse( substr($posts[ count($posts) - 1]['post'], 0, 200) );
+                    $post['excerpt'] = Parsedown::instance()->parse( substr($post['post'], 0, 200) );
 
                     // Add when the post was updated using filemtime
-                    $posts[ count($posts) - 1]['updated'] = filemtime($dir.'/'.$static_post);
+                    $post['updated'] = filemtime($dir.'/'.$static_post);
 
                     // Additional space before the author's name can pose problems, thus rid them here.
-                    $posts[ count($posts) - 1]['author'] = trim( $posts[ count($posts) - 1]['author'] );
+                    $post['author'] = trim( $post['author'] );
 
                 }   
             }
