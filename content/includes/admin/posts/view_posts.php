@@ -34,7 +34,7 @@
             </li>
 
             <li>
-                <?php echo ( Post::is_static_post($post['slug']) ) ? '<p title="This is a static post."><strong>Static</strong></p>': '<p title="This is a dynamic post."><strong>Dynamic</strong></p>';?>
+                <?php echo ( $post['type'] === 'static' ) ? '<p title="This is a static post."><strong>Static</strong></p>': '<p title="This is a dynamic post."><strong>Dynamic</strong></p>';?>
             </li>
 
             <li>
