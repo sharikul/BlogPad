@@ -528,7 +528,9 @@ class BlogPad {
 			);
 
 			foreach( $reps as $type => $val ) {
-				$string = str_replace("%$type%", $val, $string);
+				if( trim($val) !== '' ) { 
+					$string = str_replace("%$type%", $val, $string);
+				}
 			}
 
 			return $string;
