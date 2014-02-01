@@ -28,7 +28,7 @@ class BlogPad {
 		}
 
 		if( !self::has_setting('base') ) {
-			trigger_error('The base path must be specified in blog.php.', E_USER_ERROR);
+			trigger_error('The base path must be specified in settings.php.', E_USER_ERROR);
 			exit;
 		}
 
@@ -50,8 +50,6 @@ class BlogPad {
 			trigger_error("URL definition file has not been defined in $folder/struct.bpd.", E_USER_ERROR);
 			exit;
 		}
-
-		$struct = self::get_url_struct();
 
 		if( empty($structure) ) {
 			trigger_error("BlogPad couldn't find structures in $folder/struct.bpd.", E_USER_ERROR);
@@ -197,6 +195,13 @@ class BlogPad {
 
 		$homepage = self::get_blog_homepage();
 
+		$titles = isset($settings['titles']) ? $settings['titles']: '';
+
+		$includes = "$homepage/content/includes";
+
+		$js_includes = $includes.'/js/';
+		$css_includes = $includes.'/css/';
+
 		switch( self::$current_file ) {
 			case 'CATEGORY':
 
@@ -231,6 +236,8 @@ class BlogPad {
 
 				$posts = $paginate['set'];
 
+				$title = ( !empty($titles) ) ? self::bpf( $titles['CATEGORY'], array('category' => $category)): "Posts in $category";
+
 				include $pointers['CATEGORY'];
 
 			break;
@@ -247,9 +254,9 @@ class BlogPad {
 
 				$post = $post[0];
 
-				$title = $post['title'];
+				$title = ( !empty($titles) ) ? self::bpf( $titles['POST'], array('posttitle' => $post['title']) ): $post['title'];
 
-				$metadata['title'] = $title;
+				$metadata['title'] = $post['title'];
 				$metadata['description'] = $post['description'];
 
 				include $pointers['POST'];
@@ -265,6 +272,8 @@ class BlogPad {
 				$paginate = self::paginate(Post::get_all_posts(), $pagenum);
 
 				$posts = $paginate['set'];
+
+				$title = ( !empty($titles) ) ? self::bpf($titles['HOMEPAGE']): self::get_setting('blogname');
 
 				include $pointers['HOMEPAGE'];
 
@@ -287,13 +296,15 @@ class BlogPad {
 				// for pagination
 				$word = $username;
 
-				$title = "$username's profile";
+				$title = ( !empty($titles) ) ? self::bpf( $titles['PROFILE'], array('username' => $username) ): "$username's Profile";
 
 				include $pointers['PROFILE'];
 
 			break;
 
 			case 'SEARCH':
+
+				$query = urldecode($query);
 
 				// for pagination
 				$word = $query;
@@ -306,12 +317,15 @@ class BlogPad {
 
 				$posts = $paginate['set'];
 
-				$title = "Search results for '$query'";
+				$title = ( !empty($titles) ) ? self::bpf( $titles['SEARCH'], array('searchquery' => $query) ): "Search results for '$query'";
 
 				include $pointers['SEARCH'];
 			break;
 
 			default:
+
+				$title = ( !empty($titles) ) ? self::bpf( $titles['HOMEPAGE'] ): self::get_setting('blogname');
+				
 				include $pointers['HOMEPAGE'];
 			break;
 
@@ -360,7 +374,7 @@ class BlogPad {
 	}
 
 	static function get_blog_settings() {
-		return self::get_array_from_file(dirname(__DIR__).'/blog.php');
+		return self::get_array_from_file(dirname(__DIR__).'/settings.php');
 	}
 
 	/**
@@ -429,13 +443,7 @@ class BlogPad {
 		}
 
 		else {
-			if( !is_null($instead) ) {
-				return $instead;
-			}
-
-			else {
-				return null;
-			}
+			return ( !is_null($instead) ) ? $instead: null;
 		}
 	}
 
@@ -494,7 +502,39 @@ class BlogPad {
 	}
 
 	static function should_init() {
-		return self::get_setting('database') || self::get_setting('static_posts_dir');
+		return self::get_setting('database') && Query::connected() !== false || self::get_setting('static_posts_dir');
+	}
+
+	static function bpf($string, array $placeholders = array()) {
+
+		if( !empty($string) ) {
+			$blogname = self::get_setting('blogname', 'A BlogPad Blog');
+			$blogdescription = self::get_setting('blogdescription', 'An (awesome) blog.');
+
+			$posttitle = isset($placeholders['posttitle']) ? $placeholders['posttitle']: '';
+			$category = isset($placeholders['category']) ? $placeholders['category']: '';
+			$searchquery = isset($placeholders['searchquery']) ? $placeholders['searchquery']: '';
+
+			$username = isset($placeholders['username']) ? $placeholders['username']: '';
+
+			// reps = replacements
+			$reps = array(
+				'blogname' => $blogname,
+				'blogdescription' => $blogdescription,
+				'posttitle' => $posttitle,
+				'category' => $category,
+				'searchquery' => $searchquery,
+				'username' => $username
+			);
+
+			foreach( $reps as $type => $val ) {
+				$string = str_replace("%$type%", $val, $string);
+			}
+
+			return $string;
+		}
+
+		return null;
 	}
 
 	

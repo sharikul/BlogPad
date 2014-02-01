@@ -123,7 +123,7 @@ class BP_Parser extends BlogPad {
 			if( !empty($definitions) ) {
 
 				$replacements = array(
-					'word' => '[A-z\_\s]+',
+					'word' => '[A-z%0-9\_\s]+',
 					'num' => '[0-9]+',
 					'slug' => '[\w\-]+'
 				);

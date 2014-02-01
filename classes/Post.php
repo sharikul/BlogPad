@@ -16,7 +16,13 @@ class Post extends BlogPad {
             exit;
         }
 
-        return !empty( self::filter( self::get_static_posts(), 'slug', trim($slug) ) );
+        foreach (self::get_static_posts() as $index => $post) {
+            if( trim($post['slug']) === trim($slug) ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     static function get_categories() {
@@ -36,7 +42,7 @@ class Post extends BlogPad {
     }
 
     /**
-     * Returns the maximum posts per page, as defined in blog.php, else just the $default variable.
+     * Returns the maximum posts per page, as defined in settings.php, else just the $default variable.
      * @return int
      * 
      */ 
@@ -123,26 +129,24 @@ class Post extends BlogPad {
 
                     // Parsing the post will return an array by default.
                     $posts[ count( $posts ) ] = BP_Parser::parse_bpp( $dir.'/'.$static_post);
-                    
-                    $post = $posts[ count( $posts ) - 1];
 
                     // The slug will be the name of the static post file. Remove the .bpp extension.
-                    $post['slug'] = preg_replace('/\.bpp$/', '', $static_post);
+                    $posts[ count( $posts ) - 1]['slug'] = preg_replace('/\.bpp$/', '', $static_post);
 
                     // Serialize categories if they can be exploded by commas, else add the category to an array and then serialize.
-                    $post['categories'] = self::list_to_ser($post['categories']);
+                    $posts[ count( $posts ) - 1]['categories'] = self::list_to_ser($posts[ count( $posts ) - 1]['categories']);
 
                     // Remove html from the title and trim it as well.
-                    $post['title'] = trim( strip_tags( $post['title'] ));
+                    $posts[ count( $posts ) - 1]['title'] = trim( strip_tags( $posts[ count( $posts ) - 1]['title'] ));
 
                     // Add an excerpt key
-                    $post['excerpt'] = Parsedown::instance()->parse( substr($post['post'], 0, 200) );
+                    $posts[ count( $posts ) - 1]['excerpt'] = Parsedown::instance()->parse( substr($posts[ count( $posts ) - 1]['post'], 0, 200) );
 
                     // Add when the post was updated using filemtime
-                    $post['updated'] = filemtime($dir.'/'.$static_post);
+                    $posts[ count( $posts ) - 1]['updated'] = filemtime($dir.'/'.$static_post);
 
                     // Additional space before the author's name can pose problems, thus rid them here.
-                    $post['author'] = trim( $post['author'] );
+                    $posts[ count( $posts ) - 1]['author'] = trim( $posts[ count( $posts ) - 1]['author'] );
 
                 }   
             }

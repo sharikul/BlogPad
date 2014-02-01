@@ -233,7 +233,7 @@ if( isset($_POST['p_slug']) ) {
             <input type="text" name="p_categories" id="categories" <?php echo ( isset($categories) ) ? "value='$categories'": '';?> placeholder="Separate by commas." required>
 
             <div id="catlist">
-                <p>Your <abbr title="These are your categories that you've defined in blog.php">categories</abbr>: </p>
+                <p>Your <abbr title="These are your categories that you've defined in settings.php">categories</abbr>: </p>
                 <ul>
 
                 <?php if( !is_null(Post::get_categories()) ): foreach(Post::get_categories() as $category): ?>

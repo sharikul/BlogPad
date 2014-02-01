@@ -1,10 +1,6 @@
 <html>
 	<head>
-		{- IF isset($title) -}
-			<title>{- VAR title -} &mdash; Sharikul's Blog</title>
-		{- ELSE -}
-			<title>BlogPad</title>
-		{- END IF -}
+		<title>{- VAR title -}</title>
 		<link rel="stylesheet" href="{- VAR stylesheet -}">
 
 		{- WHEN 'POST' -}

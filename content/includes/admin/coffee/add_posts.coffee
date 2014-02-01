@@ -102,14 +102,14 @@ _catlist.each (index, value) ->
         
         # Prepend a category with a comma if the category field is currently filled with data
         if categories[0].value.trim() isnt ''
-            categories[0].value += ", #{@innerText.trim()}"
+            categories[0].value += ", #{@textContent.trim()}"
 
             # Update the window.categories variable so that categories can be viewed on preview
-            window.categories += ", #{@innerText.trim()}"
+            window.categories += ", #{@textContent.trim()}"
         else
-            categories[0].value += @innerText.trim()
+            categories[0].value += @textContent.trim()
 
-            window.categories = @innerText.trim()
+            window.categories = @textContent.trim()
         no
 
 categories.keyup ->

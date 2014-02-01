@@ -1,4 +1,3 @@
-{- VAR title: "Results for {-- VAR category --}" -}
 {- GET 'header' -}
 
 <header style="background-color: lavender">

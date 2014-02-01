@@ -1,10 +1,6 @@
 <html>
 	<head>
-		<?php if(isset($title) ): ?>
-			<title><?php echo $title; ?> &mdash; Sharikul's Blog</title>
-		<?php else: ?>
-			<title>BlogPad</title>
-		<?php endif; ?>
+		<title><?php echo $title; ?></title>
 		<link rel="stylesheet" href="<?php echo $stylesheet; ?>">
 
 		<?php if(BlogPad::$current_file === 'POST'):?>

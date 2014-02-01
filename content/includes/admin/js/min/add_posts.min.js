@@ -109,11 +109,11 @@
   _catlist.each(function(index, value) {
     return $(value).click(function() {
       if (categories[0].value.trim() !== '') {
-        categories[0].value += ", " + (this.innerText.trim());
-        window.categories += ", " + (this.innerText.trim());
+        categories[0].value += ", " + (this.textContent.trim());
+        window.categories += ", " + (this.textContent.trim());
       } else {
-        categories[0].value += this.innerText.trim();
-        window.categories = this.innerText.trim();
+        categories[0].value += this.textContent.trim();
+        window.categories = this.textContent.trim();
       }
       return false;
     });
