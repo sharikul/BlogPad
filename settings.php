@@ -52,7 +52,7 @@ return array(
 
 	// Login accounts go here. Format: 'username' => extended info array. Should contain first and last name, username + password (crypted)
 	'accounts' => array(
-
+		
 		'admin' => array(
 			'firstname' => 'BlogPad',
 			'lastname' => 'Admin',
