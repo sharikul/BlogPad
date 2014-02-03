@@ -1,6 +1,0 @@
-{- GET '../header' -}
-
-{- BEGIN POST -}
-	<h1>{- title -}</h1>
-	<p>{- post -}</p>
-{- END POST -}
