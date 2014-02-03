@@ -12,7 +12,7 @@ include "$classes_dir/Admin.php";
 include "$classes_dir/Parsedown.php";
 include "$classes_dir/Link_Parser.php";
 
-$pointers = Admin::get_pointers();
+extract(BlogPad::extract_globs());
 
 parse_str($_SERVER['QUERY_STRING']);
 

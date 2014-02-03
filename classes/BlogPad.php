@@ -6,7 +6,7 @@ class BlogPad {
 
 	static $to_load = '';
 
-	static $current_file = '';
+	static $current_file = 'HOMEPAGE';
 
 	static function load() {
 
@@ -18,7 +18,7 @@ class BlogPad {
 		if( !self::should_init() ) {
 			trigger_error('BlogPad cannot execute as you have not specified a way to store posts (e.g. dynamically through the database or statically through files).', E_USER_ERROR);
 			exit;
-		}	
+		}
 
 		if( self::has_setting('database') ) {
 
@@ -33,6 +33,7 @@ class BlogPad {
 		}
 
 		$folder = self::get_theme_dir();
+		$using = self::get_theme_name();
 
 		if( !is_dir($folder) ) {
 			trigger_error("BlogPad cannot locate the folder for theme '$using' in content/themes.", E_USER_ERROR);
@@ -179,6 +180,15 @@ class BlogPad {
 		return $pointers;
 	}
 
+	static function extract_globs() {
+		return array(
+			'pointers' => self::get_pointers(),
+			'settings' => self::get_blog_settings(),
+			'homepage' => self::get_blog_homepage(),
+			'includes_dir' => self::get_blog_homepage().'/content/includes'
+		);
+	}
+
 	static function load_page($page = null, array $params = array() ) {
 		if( is_null($page) ) {
 			trigger_error('Please provide a page to load.', E_USER_ERROR);
@@ -187,20 +197,14 @@ class BlogPad {
 
 		extract($params);
 
-		$pointers = self::get_pointers();
+		extract( self::extract_globs() );
 
 		$stylesheet = $pointers['STYLESHEET'];
 
-		$settings = self::get_blog_settings();
-
-		$homepage = self::get_blog_homepage();
-
 		$titles = isset($settings['titles']) ? $settings['titles']: '';
 
-		$includes = "$homepage/content/includes";
-
-		$js_includes = $includes.'/js/';
-		$css_includes = $includes.'/css/';
+		$js_includes = $includes_dir.'/js/';
+		$css_includes = $includes_dir.'/css/';
 
 		switch( self::$current_file ) {
 			case 'CATEGORY':
@@ -370,11 +374,11 @@ class BlogPad {
 	}
 
 	private static function autoload($class) {
-		include "./classes/$class.php";
+		include self::get_setting('base')."/classes/$class.php";
 	}
 
 	static function get_blog_settings() {
-		return self::get_array_from_file(dirname(__DIR__).'/settings.php');
+		return self::get_array_from_file(dirname(dirname(__FILE__)).'/settings.php');
 	}
 
 	/**
@@ -416,7 +420,7 @@ class BlogPad {
 			break;
 		}
 
-		echo "<h1 style='font-family: sans-serif !important; padding: 5em;'>$message -> $line in $file</h1>";
+		echo "<h1 style='font-family: sans-serif !important; padding: 5em;'>$message</h1>";
 	}
 
 	static function has_setting($setting = null, $isval = null) {
@@ -449,12 +453,11 @@ class BlogPad {
 
 	static function four_o_four($message = 'Sorry, you have made an error.', $show_error = true, array $params = array() ) {
 
-		$pointers = self::get_pointers();
+		extract( self::extract_globs() );
+
+		$titles = self::get_setting('titles');
 
 		$stylesheet = $pointers['STYLESHEET'];
-
-		// Store the path to the homepage in a variable so that it can referenced in an error template.
-		extract(array('homepage' => self::get_blog_homepage()) );
 
 		// Turn array keys into variables so that global vars such as stylesheet stay in scope even on error.
 		extract($params);
@@ -466,6 +469,7 @@ class BlogPad {
 
 		// Some pages might not require an include of the error template, thus only show the page on true.
 		if( $show_error ) {
+			$title = ( !empty($titles) ) ? $titles['ERROR']: "You've errored!";
 			include $pointers['ERROR'];
 			exit;
 		}

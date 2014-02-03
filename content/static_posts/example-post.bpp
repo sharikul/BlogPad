@@ -1,0 +1,15 @@
+-- BEGIN METADATA
+Title: An example of a static post.
+
+Date: 2014-02-03 15:19:00
+
+Author: admin
+
+Categories: BlogPad
+
+Description: This is an example of a static post. Feel free to edit it.
+-- END METADATA
+
+Now that you've successfully set up BlogPad, it's time to introduce you to the different post types that BlogPad provides. This is a **static post**, and is located in content/static_posts/example-post.bpp.
+
+You're probably viewing the contents of this post in the web editor, _or_ you're viewing the raw _.bpp_ file. Additionally, you may be even viewing the post in your browser.

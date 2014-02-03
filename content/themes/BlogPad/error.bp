@@ -1,0 +1,5 @@
+{- GET 'includes/header' -}
+
+<h1>Damn. You've errored. You may wanna go back to the homepage now.</h1>
+
+{- GET 'includes/footer' -}

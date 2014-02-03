@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{- VAR title -}</title>
+    <link rel="stylesheet" href="{- VAR stylesheet -}">
+    <link href='http://fonts.googleapis.com/css?family=Duru+Sans' rel='stylesheet' type='text/css'>
+</head>
+    <body>
+        <header>
+            <ul>
+                <li>
+                    <a href="{- VAR homepage -}">Blog Home</a>
+                </li>
+
+                <li>
+                    <a href="http://sharikul.comyr.com">My Website</a>
+                </li>
+            </ul>
+        </header>
+
+        <div id="content">

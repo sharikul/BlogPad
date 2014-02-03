@@ -1,0 +1,25 @@
+{- GET '../includes/header' -}
+
+<div id="metadata">
+    <h1>Posts in {- metadata: title -}</h1>
+    <h3>{- metadata: description -}</h3>
+</div>
+<hr>
+
+{- BEGIN POSTS -}
+    <article>
+        <h1>{- title -}</h1>
+        <p id="body">{- excerpt -}</p>
+
+        <p class="inline">
+            Posted in 
+            <ul class="inline" id="categories">
+                <li class="categories">{- categories -}</li>
+            </ul>
+        </p>
+    </article>
+{- END POSTS -}
+
+{- GET '../includes/pagination' -}
+
+{- GET '../includes/footer' -}

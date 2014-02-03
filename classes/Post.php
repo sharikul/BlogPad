@@ -245,6 +245,7 @@ class Post extends BlogPad {
             }
 
             else if( $db_posts !== serialize(self::get_db_posts() )) {
+
                 $db_posts = self::get_db_posts();
 
                 $cache->set('db_posts', serialize($db_posts), 300);

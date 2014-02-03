@@ -1,0 +1,6 @@
+{- BEGIN PAGINATION -}
+    <ul>
+        <li class="pagination">{- previous:Latest Posts -}</li>
+        <li class="pagination">{- next:Older Posts -}</li>
+    </ul>
+{- END PAGINATION -}

@@ -1,16 +1,16 @@
 <?php
 return array(
 
-	'base' => $_SERVER['DOCUMENT_ROOT'].basename(__DIR__),
+	'base' => dirname(realpath(__FILE__)),
 
 	// What's the name of your blog?
-	'blogname' => 'BlogPad Blog',
+	'blogname' => "Sharikul's Blog",
 
 	// How would you describe your blog?
 	'blogdescription' => 'An awesome blog!',
 
 	// What is the theme that's being used? Set it here.
-	'using' => 'default',
+	'using' => 'BlogPad',
 
 	'database' => array(
 		'host' => 'localhost',
@@ -25,20 +25,19 @@ return array(
 	// Categories go in this array. Format: 'name' => 'description'
 	'categories' => array(
 
-		'Random' => 'A collection of random posts which have been plucked out of thin air.',
-
-		'Sharikul' => 'All Posts related to sharikul.',
-
-		'Static' => 'Static post'
+		'BlogPad' => 'A collection of posts related to "BlogPad".'
 	),
 
 	// Provide a path to the static posts directory here.
 	'static_posts_dir' => 'content/static_posts',
 
-	'no_post_message' => 'Go away!',
+	// Message to display on events of no posts to display.
+	'no_post_message' => '<h1>Unfortunately, there is nothing to see here.</h1>',
 
+	// How many posts do you want to be visible at any one time?
 	'posts_per_page' => 5,
 
+	// Specify 'DESC' if you want posts to appear from latest to old, or 'ASC' for the opposite.
 	'post_sort_type' => 'desc',
 
 	// Provide titles for different templates in this array. 
@@ -47,24 +46,18 @@ return array(
 		'POST' => '%posttitle% - %blogname%',
 		'CATEGORY' => 'Posts in category %category%',
 		'SEARCH' => 'Search results for "%searchquery%" - %blogname%',
-		'PROFILE' => "This is %username%'s profile"
+		'PROFILE' => "This is %username%'s profile",
+		'ERROR' => "You've errored. Oops"
 	),
 
 	// Login accounts go here. Format: 'username' => extended info array. Should contain first and last name, username + password (crypted)
 	'accounts' => array(
 
-		'sharikul' => array(
-			'firstname' => 'Sharikul',
-			'lastname' => 'Islam',
-			'username' => 'sharikul',
-			'password' => '$1$F84.qL3.$7RVg43fG5/hwhdVLTLpxx0',
-		),
-
-		'jakirul' => array(
-			'firstname' => 'Jakirul',
-			'lastname' => 'Islam',
-			'username' => 'jakirul',
-			'password' => '$1$rr1.YF3.$CZrCQZ.jFUNyYgtGr2Iir0'
+		'admin' => array(
+			'firstname' => 'BlogPad',
+			'lastname' => 'Admin',
+			'username' => 'admin',
+			'password' => '$1$sF..FR0.$yzm..6pE9tgy.ryjHygOw0' /* password is "this-is-the-admin-password". Change it via "crypt_gen.php" */
 		)
 	)
 

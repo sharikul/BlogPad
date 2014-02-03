@@ -16,6 +16,8 @@ class Link_Parser extends BlogPad {
 
 			if( preg_match("/$regex/", self::current_uri() ) ) {
 
+				$error = false;
+
 				$params = preg_replace("/$regex/", $actions['params'], self::current_uri() );
 
 				if( !strpos($params, '&') ) {

@@ -417,7 +417,7 @@ class BP_Parser extends BlogPad {
 		$after = '<?php endforeach; ?>';
 
 		if( self::has_setting('auto_link', true) ) {
-			return preg_replace('/(.*?){\- categories \-}(.*)/', $before.'<a href="<?php echo Link_Parser::generate_link("category", array("word" => $category));?>">$1<?php echo $category;?>$2</a>'.$after, $content);
+			return preg_replace('/(.*?){\- categories \-}(.*)/', $before.'$1<a href="<?php echo Link_Parser::generate_link("category", array("word" => $category));?>"><?php echo $category;?></a>$2'.$after, $content);
 		}
 
 		preg_match('/.*?{\- categories \-}.*/', $content, $cats);
@@ -496,15 +496,20 @@ class BP_Parser extends BlogPad {
 
 		if( !empty($post_loop_block[0]) ) {
 			
-			$_content = preg_replace('/{\- (excerpt|date|slug|description|updated|author) \-}/', '<?php echo $post[\'$1\']; ?>', $post_loop_block[0]);
+			// excerpt, slug, and description are those indexes which don't require additional processing.
+			$_content = preg_replace('/{\- (excerpt|slug|description) \-}/', '<?php echo $post[\'$1\']; ?>', $post_loop_block[0]);
 
 			if( self::has_setting('auto_link', true) ) {
 
 				$_content = str_replace('{- title -}', "<a href=\"<?php echo Link_Parser::generate_link('post', array('slug' => \$post['slug']));?>\"><?php echo \$post['title'];?></a>", $_content);
+
+				$_content = str_replace('{- author -}', "<a href=\"<?php echo Link_Parser::generate_link('profile', array('slug' => \$post['author']));?>\"><?php echo \$post['author'];?></a>", $_content);
 			}
 
 			else {
 				$_content = str_replace('{- title -}', "<?php echo \$post['title'];?>", $_content);
+
+				$_content = str_replace('{- author -}', "<?php echo \$post['author'];?>", $_content);
 			}
 
 			$_content = str_replace('{- post -}', "<?php echo Parsedown::instance()->parse(\$post['post']);?>", $_content);

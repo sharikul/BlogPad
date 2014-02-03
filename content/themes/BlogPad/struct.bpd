@@ -1,0 +1,12 @@
+{- FILE STRUCT -}
+
+{- BEGIN FILES -}
+
+    {- HOMEPAGE: index -}
+    {- STYLESHEET: css/style -}
+    {- CATEGORY: posts/view_cat -}
+    {- POST: posts/view_post -}
+    {- URL_STRUCT: url_struct -}
+    {- ERROR: error -}
+    
+{- END FILES -}
