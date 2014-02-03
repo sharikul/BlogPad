@@ -1,4 +1,0 @@
-{- VAR title: "Oops, you've made an error!" -}
-{- GET 'header' -}
-	<h1>If that was a post you were looking for, that doesn't exist &mdash; unfortunately! <a href="{- VAR homepage -}">Go to the homepage?</a></h1>
-{- GET 'footer' -}
