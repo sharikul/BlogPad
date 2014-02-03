@@ -39,7 +39,7 @@
 		 * @return bool
 		 */
 
-		private function could_be_sql( $code = '' ) {
+		private static function could_be_sql( $code = '' ) {
 
 			$regex = '/(SELECT|UPDATE|DELETE|DESCRIBE|EXPLAIN|CREATE|ALTER|DROP|INSERT|SHOW) (FROM|INTO|.*) (FROM|SET|.*) (.*)/';
 
