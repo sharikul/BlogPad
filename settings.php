@@ -9,14 +9,17 @@ return array(
 	// How would you describe your blog?
 	'blogdescription' => 'An awesome blog!',
 
+	// Visit http://php.net/manual/en/timezones.php and set accordingly
+	'timezone' => 'Europe/London',
+
 	// What is the theme that's being used? Set it here.
 	'using' => 'BlogPad',
 
 	'database' => array(
-		'host' => 'localhost',
-		'username' => 'root',
-		'password' => '',
-		'database' => 'blogpad_posts',
+		'host' => 'localhost', // change this accordingly
+		'username' => 'root', // change this accordingly
+		'password' => '', // fill this in accordingly
+		'database' => '', // fill this in accordingly
 	),
 
 	// if true, BlogPad will automatically link post title's to a URL.

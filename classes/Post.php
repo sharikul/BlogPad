@@ -3,11 +3,11 @@
 class Post extends BlogPad {
 
     static function can_static_post() {
-        return ( !is_null(self::static_posts_dir()) );
+        return ( !is_null(BlogPad::static_posts_dir()) );
     }
 
     static function can_db_post() {
-        return !is_null( self::get_setting('database') ) && Query::connected() !== false;
+        return !is_null( BlogPad::get_setting('database') ) && Query::connected() !== false;
     }
 
     static function is_static_post($slug = null) {
@@ -16,7 +16,7 @@ class Post extends BlogPad {
             exit;
         }
 
-        foreach (self::get_static_posts() as $index => $post) {
+        foreach (Post::get_static_posts() as $index => $post) {
             if( trim($post['slug']) === trim($slug) ) {
                 return true;
             }
@@ -27,11 +27,11 @@ class Post extends BlogPad {
 
     static function get_categories() {
 
-        if( self::has_setting('categories') ) {
+        if( BlogPad::has_setting('categories') ) {
 
             $categories = array();
 
-            foreach( self::get_setting('categories') as $category => $meta ) {
+            foreach( BlogPad::get_setting('categories') as $category => $meta ) {
                 $categories[] = $category;
             }
 
@@ -48,7 +48,7 @@ class Post extends BlogPad {
      */ 
 
     static function max_posts($default = 5) {
-        return ( self::has_setting('posts_per_page') ) && is_numeric( self::get_setting('posts_per_page') ) ? (int) self::get_setting('posts_per_page'): $default;
+        return ( BlogPad::has_setting('posts_per_page') ) && is_numeric( BlogPad::get_setting('posts_per_page') ) ? (int) BlogPad::get_setting('posts_per_page'): $default;
     }
 
     static function filter() {
@@ -89,7 +89,7 @@ class Post extends BlogPad {
 
                 if($post[$key] === $value) {
                     $post['id'] = $index;
-                    $post['type'] = ( self::is_static_post($post['slug']) ) ? 'static': 'db';
+                    $post['type'] = ( Post::is_static_post($post['slug']) ) ? 'static': 'db';
                     $filtered_set[] = $post;
                 }
             }
@@ -98,7 +98,7 @@ class Post extends BlogPad {
 
                 if( preg_match('/'.preg_quote($value).'/i', $post[$key]) ) {
                     $post['id'] = $index;
-                    $post['type'] = ( self::is_static_post($post['slug']) ) ? 'static': 'db';
+                    $post['type'] = ( Post::is_static_post($post['slug']) ) ? 'static': 'db';
                     $filtered_set[] = $post;
                 }
             }
@@ -115,9 +115,9 @@ class Post extends BlogPad {
 
     static function get_static_posts() {
 
-        if( self::has_setting('static_posts_dir') ) {
+        if( BlogPad::has_setting('static_posts_dir') ) {
 
-            $dir = self::get_setting('base').'/'.self::get_setting('static_posts_dir');
+            $dir = BlogPad::get_setting('base').'/'.BlogPad::get_setting('static_posts_dir');
 
             $opendir = opendir($dir);
 
@@ -134,7 +134,7 @@ class Post extends BlogPad {
                     $posts[ count( $posts ) - 1]['slug'] = preg_replace('/\.bpp$/', '', $static_post);
 
                     // Serialize categories if they can be exploded by commas, else add the category to an array and then serialize.
-                    $posts[ count( $posts ) - 1]['categories'] = self::list_to_ser($posts[ count( $posts ) - 1]['categories']);
+                    $posts[ count( $posts ) - 1]['categories'] = BlogPad::list_to_ser($posts[ count( $posts ) - 1]['categories']);
 
                     // Remove html from the title and trim it as well.
                     $posts[ count( $posts ) - 1]['title'] = trim( strip_tags( $posts[ count( $posts ) - 1]['title'] ));
@@ -223,30 +223,30 @@ class Post extends BlogPad {
         $db_posts = $cache->get('db_posts');
 
         if( is_null($static_posts) ) {
-            $static_posts = self::get_static_posts();
+            $static_posts = Post::get_static_posts();
 
             // Store data in the cache for 5 minutes
             $cache->set('static_posts', serialize($static_posts), 300);
         }
 
         else if( is_null($db_posts) ) {
-            $db_posts = self::get_db_posts();
+            $db_posts = Post::get_db_posts();
 
             $cache->set('db_posts', serialize($db_posts), 300);
         }
 
         else {
 
-            if( $static_posts !== serialize(self::get_static_posts() )) {
-                $static_posts = self::get_static_posts();
+            if( $static_posts !== serialize(Post::get_static_posts() )) {
+                $static_posts = Post::get_static_posts();
 
                 // Recache new array
                 $cache->set('static_posts', serialize($static_posts), 300);
             }
 
-            else if( $db_posts !== serialize(self::get_db_posts() )) {
+            else if( $db_posts !== serialize(Post::get_db_posts() )) {
 
-                $db_posts = self::get_db_posts();
+                $db_posts = Post::get_db_posts();
 
                 $cache->set('db_posts', serialize($db_posts), 300);
             }
@@ -281,7 +281,7 @@ class Post extends BlogPad {
                 $dates[] = $post['date'];
             }
 
-            $sort = ( strtoupper( self::get_setting('post_sort_type', 'DESC') ) === 'DESC' ) ? SORT_DESC: SORT_ASC; 
+            $sort = ( strtoupper( Post::get_setting('post_sort_type', 'DESC') ) === 'DESC' ) ? SORT_DESC: SORT_ASC; 
 
             // Sort by date now.
             array_multisort($dates, $sort, $posts);
@@ -300,7 +300,7 @@ class Post extends BlogPad {
             exit;
         }
 
-        return self::filter('author', $user, true);
+        return POst::filter('author', $user, true);
     }
 
     static function get_post_by_title($title = null) {
@@ -309,14 +309,14 @@ class Post extends BlogPad {
             exit;
         }
 
-        $post = self::filter('title', trim($title), true);
+        $post = Post::filter('title', trim($title), true);
 
         return ( !empty($post) ) ? $post: null;
     }
 
     static function get_post_by_id($id = 0) {
 
-        $posts = self::get_all_posts();
+        $posts = Post::get_all_posts();
 
         if( isset($posts[$id] ) ) {
             $posts[$id]['id'] = $id;
@@ -334,7 +334,7 @@ class Post extends BlogPad {
 
         $slug = trim($slug);
 
-        $post = self::filter('slug', $slug);
+        $post = Post::filter('slug', $slug);
 
         return ( !empty($post) ) ? $post: null;
     }
@@ -351,7 +351,7 @@ class Post extends BlogPad {
             exit;
         }
 
-        return ( self::filter('title', trim($title), true) ) ? true: false;
+        return ( Post::filter('title', trim($title), true) ) ? true: false;
     }
 
     /**
@@ -366,7 +366,7 @@ class Post extends BlogPad {
             exit;
         }
 
-        return ( self::filter('slug', trim($slug), true) ) ? true: false;
+        return ( Post::filter('slug', trim($slug), true) ) ? true: false;
     }
 
     static function get_title_of_slug($slug = null) {
@@ -375,8 +375,8 @@ class Post extends BlogPad {
             exit;
         }
 
-        if( self::is_slug($slug) ) {
-            $post = self::get_post_by_slug($slug);
+        if( Post::is_slug($slug) ) {
+            $post = Post::get_post_by_slug($slug);
 
             return $post['title'];
         }

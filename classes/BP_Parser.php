@@ -28,11 +28,11 @@ class BP_Parser extends BlogPad {
 		$contents = file_get_contents($filepath);
 
 		if( preg_match('/{\- FILE STRUCT \-}/', $contents) ) {
-			return self::parse_file_struct($contents, $filepath);
+			return BP_Parser::parse_file_struct($contents, $filepath);
 		} 
 
 		else if( preg_match('/{\- URL STRUCT \-}/', $contents) ) {
-			return self::parse_url_struct($contents, $filepath, $raw);
+			return BP_Parser::parse_url_struct($contents, $filepath, $raw);
 		}
 
 		else {
@@ -256,11 +256,11 @@ class BP_Parser extends BlogPad {
 
 	protected static function gen($file) {
 
-		$compile = self::compile($file);
+		$compile = BP_Parser::compile($file);
 
-		$root = self::get_templates_dir();
+		$root = BlogPad::get_templates_dir();
 
-		$theme = self::get_theme_name();
+		$theme = BlogPad::get_theme_name();
 
 		$template_name = 'compiled_'.basename($file).'.php';
 
@@ -295,8 +295,8 @@ class BP_Parser extends BlogPad {
 
 		$content = file_get_contents($file);
 		
-		foreach( self::$parts as $part ) {
-			$content = call_user_func("self::handle_$part", $content, dirname($file) );
+		foreach( BP_Parser::$parts as $part ) {
+			$content = call_user_func("BP_Parser::handle_$part", $content, dirname($file) );
 		}
 
 		return $content;
@@ -337,8 +337,8 @@ class BP_Parser extends BlogPad {
 				}
 
 				// Since there's no telling what can be in an included template, let's just run the whole process over again.
-				foreach( self::$parts as $part ) {
-					$content = str_replace($gets[0][$index], call_user_func("self::handle_$part", file_get_contents("$root/$__part.bp"), dirname("$root/$__part.bp") ), $content);
+				foreach( BP_Parser::$parts as $part ) {
+					$content = str_replace($gets[0][$index], call_user_func("BP_Parser::handle_$part", file_get_contents("$root/$__part.bp"), dirname("$root/$__part.bp") ), $content);
 				}
 			}
 
@@ -499,7 +499,7 @@ class BP_Parser extends BlogPad {
 			// excerpt, slug, and description are those indexes which don't require additional processing.
 			$_content = preg_replace('/{\- (excerpt|slug|description) \-}/', '<?php echo $post[\'$1\']; ?>', $post_loop_block[0]);
 
-			if( self::has_setting('auto_link', true) ) {
+			if( BlogPad::has_setting('auto_link', true) ) {
 
 				$_content = str_replace('{- title -}', "<a href=\"<?php echo Link_Parser::generate_link('post', array('slug' => \$post['slug']));?>\"><?php echo \$post['title'];?></a>", $_content);
 
@@ -520,8 +520,8 @@ class BP_Parser extends BlogPad {
 
 
 			// Now parse date and categories calls
-			$_content = self::handle_dates($_content);
-			$_content = self::handle_categories($_content);
+			$_content = BP_Parser::handle_dates($_content);
+			$_content = BP_Parser::handle_categories($_content);
 
 			$content = str_replace($post_loop_block[0], $_content, $content);
 		}
@@ -549,7 +549,7 @@ class BP_Parser extends BlogPad {
 
 		preg_match('/{- BEGIN PAGINATION -}.*?{- END PAGINATION -}/s', $content, $pnation);
 
-		$autolink = self::has_setting('auto_link');
+		$autolink = BlogPad::has_setting('auto_link');
 
 		$p_processed = '';
 

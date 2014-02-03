@@ -10,20 +10,18 @@ class Link_Parser extends BlogPad {
 
 	static function load() {
 
-		foreach( self::get_url_struct() as $regex => $actions ) {
+		foreach( BlogPad::get_url_struct() as $regex => $actions ) {
 
 			$regex = str_replace('/', '\/', $regex);
 
-			if( preg_match("/$regex/", self::current_uri() ) ) {
+			if( preg_match("/$regex/", Link_Parser::current_uri() ) ) {
 
-				$error = false;
-
-				$params = preg_replace("/$regex/", $actions['params'], self::current_uri() );
+				$params = preg_replace("/$regex/", $actions['params'], BlogPad::current_uri() );
 
 				if( !strpos($params, '&') ) {
 					$explode = explode('=', $params);
 
-					self::$vars[ $explode[0] ] = $explode[1];
+					BlogPad::$vars[ $explode[0] ] = $explode[1];
 				}
 
 				else {
@@ -32,11 +30,11 @@ class Link_Parser extends BlogPad {
 						
 						$explode = explode('=', $query);
 
-						self::$vars[ $explode[0] ] = $explode[1];
+						BlogPad::$vars[ $explode[0] ] = $explode[1];
 					}
 				}
 
-				self::$to_load = $actions['template'];
+				BlogPad::$to_load = $actions['template'];
 
 			}
 
@@ -49,7 +47,7 @@ class Link_Parser extends BlogPad {
 			exit;
 		}
 		
-		$url = self::get_blog_homepage();
+		$url = BlogPad::get_blog_homepage();
 
 		$convs = array(
 			'%word%' => isset($options['word']) ? trim($options['word']): '',
@@ -57,7 +55,7 @@ class Link_Parser extends BlogPad {
 			'%num%' => isset($options['num'])? (int) $options['num']: 0
 		);
 
-		foreach( self::get_url_struct(true) as $_url => $meta ) {
+		foreach( BlogPad::get_url_struct(true) as $_url => $meta ) {
 
 			if( strtoupper($meta['template']) === strtoupper($struct) ) {
 				
@@ -90,7 +88,7 @@ class Link_Parser extends BlogPad {
 	 */ 
 
 	static function current_uri() {
-    		return preg_replace('/^\/?'.basename(self::get_setting('base')).'\/?/', '', $_SERVER['REQUEST_URI']); 
+    		return preg_replace('/^\/?'.basename(BlogPad::get_setting('base')).'\/?/', '', $_SERVER['REQUEST_URI']); 
 	}
 
 	/**

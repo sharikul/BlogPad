@@ -3,34 +3,36 @@ class Admin extends BlogPad {
 
 	static function load() {
 
-		spl_autoload_register('self::autoload');
+        date_default_timezone_set( BlogPad::get_setting('timezone', 'Europe/London') );
 
-        set_error_handler('self::throw_error');
+		spl_autoload_register('Admin::autoload');
+
+        set_error_handler('BlogPad::throw_error');
 
 		session_start();
 
         if( !User::logged_in() ) {
-            header('Location: '.self::get_blog_homepage().'/admin/login.php');
+            header('Location: '.BlogPad::get_blog_homepage().'/admin/login.php');
             exit;
         }
 
         // Sometimes the user's info can change whilst they're logged in. If that's the case, destroy the current session and redirect to login.
         if( !User::is_still_valid() ) {
-            User::logout( self::get_blog_homepage().'/admin/login.php');
+            User::logout( BlogPad::get_blog_homepage().'/admin/login.php');
         }
         
-        if( self::has_setting('database') ) {
-		  Query::setup( self::get_setting('database') );
+        if( BlogPad::has_setting('database') ) {
+		  Query::setup( BlogPad::get_setting('database') );
         }
 		
-		self::load_part('header');
+		Admin::load_part('header');
 
 		if( !isset( $_GET['page'] ) ) {
 
             $author = User::get_info('fullname');
 
-			self::load_part('afterhead', array('title' => 'Add a Post'));
-			self::load_part('posts/add_posts', array('page_type' => 'new'));
+			Admin::load_part('afterhead', array('title' => 'Add a Post'));
+			Admin::load_part('posts/add_posts', array('page_type' => 'new'));
 		}
 
 		else {
@@ -38,12 +40,12 @@ class Admin extends BlogPad {
 			switch( trim( $_GET['page'] ) ) {
 
                 case 'add_posts':
-                    self::load_part('afterhead', array('title' => 'Add a Post'));
-                    self::load_part('posts/add_posts', array('page_type' => 'new'));
+                    Admin::load_part('afterhead', array('title' => 'Add a Post'));
+                    Admin::load_part('posts/add_posts', array('page_type' => 'new'));
                 break;
 
                 case 'edit_post':
-                    self::load_part('afterhead', array('title' => 'Edit Post'));
+                    Admin::load_part('afterhead', array('title' => 'Edit Post'));
 
                     if( !isset($_GET['post']) || trim($_GET['post']) === '' ) {
                         trigger_error('You cannot edit a post without supplying a `posts` parameter in the URL.', E_USER_ERROR);
@@ -68,7 +70,7 @@ class Admin extends BlogPad {
 
                     $title = htmlentities($post['title'], ENT_QUOTES);
 
-                    $categories = self::ser_to_list($post['categories']);
+                    $categories = BlogPad::ser_to_list($post['categories']);
 
                     $description = htmlentities($post['description'], ENT_QUOTES);
 
@@ -86,7 +88,7 @@ class Admin extends BlogPad {
 
                     $author = trim($post['author']);
 
-                    self::load_part('posts/add_posts', array(
+                    Admin::load_part('posts/add_posts', array(
                         'id' => $id,
                         'title' => $title,
                         'categories' => $categories,
@@ -102,7 +104,7 @@ class Admin extends BlogPad {
 
                 case 'view_posts':
 
-                    self::load_part('afterhead', array('title' => 'Your Posts'));
+                    Admin::load_part('afterhead', array('title' => 'Your Posts'));
 
                     $message = '';
 
@@ -128,9 +130,9 @@ class Admin extends BlogPad {
 
                     $current_page = ( isset($_GET['pagenum'] ) ) ? (int) $_GET['pagenum']: 1;
 
-                    $paginate = self::paginate($posts, $current_page);
+                    $paginate = BlogPad::paginate($posts, $current_page);
 
-                    self::load_part('posts/view_posts', array(
+                    Admin::load_part('posts/view_posts', array(
                         'posts' => $paginate['set'], 
                         'show_next_page' => (bool) $paginate['has_next_page'],
                         'show_prev_page' => (bool) $paginate['has_prev_page'],
@@ -191,7 +193,7 @@ class Admin extends BlogPad {
         $get_by_id = Post::get_post_by_id($id);
 
         // Check that ALL the variables representing each post field have been completed.
-        if( self::mempty($title, $post, $description, $slug) ) {
+        if( BlogPad::mempty($title, $post, $description, $slug) ) {
             $errors[] = 'To publish this post, you must complete all fields.';
         }
 
@@ -254,7 +256,7 @@ class Admin extends BlogPad {
                                 ':author' => User::get_info('username'),
                                 ':date' => date('Y-m-d G:i:s'),
                                 ':slug' => $slug,
-                                ':categories' => self::list_to_ser($categories)
+                                ':categories' => BlogPad::list_to_ser($categories)
                             )
 
                             ));
@@ -271,7 +273,7 @@ class Admin extends BlogPad {
                                 'author' => User::get_info('username'),
                                 'updated' => date('Y-m-d G:i:s'),
                                 'slug' => $slug,
-                                'categories' => self::list_to_ser($categories)
+                                'categories' => BlogPad::list_to_ser($categories)
                             ),
 
                             // Update by slug in the database

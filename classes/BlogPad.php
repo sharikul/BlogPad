@@ -10,30 +10,32 @@ class BlogPad {
 
 	static function load() {
 
-		set_error_handler('self::throw_error');
+		set_error_handler('BlogPad::throw_error');
 
-		spl_autoload_register('self::autoload');
+		spl_autoload_register('BlogPad::autoload');
+
+		date_default_timezone_set( BlogPad::get_setting('timezone', 'Europe/London') );
 
 		// Halt the execution of BlogPad if there's no possibly way of dealing with posts.
-		if( !self::should_init() ) {
+		if( !BlogPad::should_init() ) {
 			trigger_error('BlogPad cannot execute as you have not specified a way to store posts (e.g. dynamically through the database or statically through files).', E_USER_ERROR);
 			exit;
 		}
 
-		if( self::has_setting('database') ) {
+		if( BlogPad::has_setting('database') ) {
 
 			// Get the database set up
-			Query::setup( self::get_setting('database') );
+			Query::setup( BlogPad::get_setting('database') );
 
 		}
 
-		if( !self::has_setting('base') ) {
+		if( !BlogPad::has_setting('base') ) {
 			trigger_error('The base path must be specified in settings.php.', E_USER_ERROR);
 			exit;
 		}
 
-		$folder = self::get_theme_dir();
-		$using = self::get_theme_name();
+		$folder = BlogPad::get_theme_dir();
+		$using = BlogPad::get_theme_name();
 
 		if( !is_dir($folder) ) {
 			trigger_error("BlogPad cannot locate the folder for theme '$using' in content/themes.", E_USER_ERROR);
@@ -45,7 +47,7 @@ class BlogPad {
 			exit;
 		}
 
-		$structure = self::get_file_struct();
+		$structure = BlogPad::get_file_struct();
 
 		if( !isset($structure['paths']['URL_STRUCT']) ) {
 			trigger_error("URL definition file has not been defined in $folder/struct.bpd.", E_USER_ERROR);
@@ -68,21 +70,21 @@ class BlogPad {
 			exit;
 		}
 
-		$pointers = self::get_pointers();
+		$pointers = BlogPad::get_pointers();
 
-		// Link_Parser will populate self::$vars as well as insert a pointer in self::$to_load
+		// Link_Parser will populate BlogPad::$vars as well as insert a pointer in BlogPad::$to_load
 		Link_Parser::load();
 
-		if( !empty(self::$to_load) ) {
+		if( !empty(BlogPad::$to_load) ) {
 
-			self::$current_file = self::$to_load;
+			BlogPad::$current_file = BlogPad::$to_load;
 			
-			self::load_page($pointers[self::$to_load], self::$vars); 
+			BlogPad::load_page($pointers[BlogPad::$to_load], BlogPad::$vars); 
 		}
 
 		else {
-			self::$current_file = 'HOMEPAGE';
-			self::load_page($pointers['HOMEPAGE'], self::$vars);
+			BlogPad::$current_file = 'HOMEPAGE';
+			BlogPad::load_page($pointers['HOMEPAGE'], BlogPad::$vars);
 		}
 	}
 
@@ -125,35 +127,35 @@ class BlogPad {
     }
 
 	static function get_theme_name() {
-		return self::get_setting('using');
+		return BlogPad::get_setting('using');
 	}
 
 	static function get_templates_dir() {
-		return self::get_setting('base').'/content/compiled_templates';
+		return BlogPad::get_setting('base').'/content/compiled_templates';
 	}
 
 	static function get_theme_dir() {
-		return self::get_setting('base').'/content/themes/'.self::get_setting('using');
+		return BlogPad::get_setting('base').'/content/themes/'.BlogPad::get_setting('using');
 	}
 
 	static function get_blog_homepage() {
-		return 'http://'.rtrim($_SERVER['HTTP_HOST'].'/'.basename( self::get_setting('base') ), '/');
+		return 'http://'.rtrim($_SERVER['HTTP_HOST'].'/'.basename( BlogPad::get_setting('base') ), '/');
 	}
 
 	static function get_file_struct() {
-		return BP_Parser::parse_bpd( self::get_theme_dir().'/struct.bpd');
+		return BP_Parser::parse_bpd( BlogPad::get_theme_dir().'/struct.bpd');
 	}
 
 	static function get_url_struct($raw = false) {
-		$struct = self::get_file_struct();
+		$struct = BlogPad::get_file_struct();
 
-		return BP_Parser::parse_bpd( self::get_theme_dir().'/'.$struct['paths']['URL_STRUCT'], $raw);
+		return BP_Parser::parse_bpd( BlogPad::get_theme_dir().'/'.$struct['paths']['URL_STRUCT'], $raw);
 	}
 
 	static function get_pointers() {
-		$structure = self::get_file_struct();
+		$structure = BlogPad::get_file_struct();
 
-		$folder = self::get_theme_dir();
+		$folder = BlogPad::get_theme_dir();
 
 		$pointers = array();
 
@@ -168,7 +170,7 @@ class BlogPad {
 			else {
 
 				if( $type === 'STYLESHEET' ) {
-					$pointers[$type] = self::get_blog_homepage().'/content/themes/'.self::get_theme_name()."/$path";
+					$pointers[$type] = BlogPad::get_blog_homepage().'/content/themes/'.BlogPad::get_theme_name()."/$path";
 				}
 
 				else {
@@ -182,10 +184,10 @@ class BlogPad {
 
 	static function extract_globs() {
 		return array(
-			'pointers' => self::get_pointers(),
-			'settings' => self::get_blog_settings(),
-			'homepage' => self::get_blog_homepage(),
-			'includes_dir' => self::get_blog_homepage().'/content/includes'
+			'pointers' => BlogPad::get_pointers(),
+			'settings' => BlogPad::get_blog_settings(),
+			'homepage' => BlogPad::get_blog_homepage(),
+			'includes_dir' => BlogPad::get_blog_homepage().'/content/includes'
 		);
 	}
 
@@ -197,7 +199,7 @@ class BlogPad {
 
 		extract($params);
 
-		extract( self::extract_globs() );
+		extract( BlogPad::extract_globs() );
 
 		$stylesheet = $pointers['STYLESHEET'];
 
@@ -206,7 +208,7 @@ class BlogPad {
 		$js_includes = $includes_dir.'/js/';
 		$css_includes = $includes_dir.'/css/';
 
-		switch( self::$current_file ) {
+		switch( BlogPad::$current_file ) {
 			case 'CATEGORY':
 
 				$posts = array();
@@ -216,7 +218,7 @@ class BlogPad {
 				$category = $word;
 
 				if( !array_key_exists($category, $settings['categories']) ) {
-					self::four_o_four();
+					BlogPad::four_o_four();
 				}
 
 				$metadata['title'] = trim($category);
@@ -236,11 +238,11 @@ class BlogPad {
 					$pagenum = 1;
 				}
 
-				$paginate = self::paginate($posts, $pagenum);
+				$paginate = BlogPad::paginate($posts, $pagenum);
 
 				$posts = $paginate['set'];
 
-				$title = ( !empty($titles) ) ? self::bpf( $titles['CATEGORY'], array('category' => $category)): "Posts in $category";
+				$title = ( !empty($titles) ) ? BlogPad::bpf( $titles['CATEGORY'], array('category' => $category)): "Posts in $category";
 
 				include $pointers['CATEGORY'];
 
@@ -251,14 +253,14 @@ class BlogPad {
 				$post = Post::filter('slug', $_post, true);
 
 				if( empty( $post ) ) {
-					self::four_o_four();
+					BlogPad::four_o_four();
 				}
 
 				$metadata = array();
 
 				$post = $post[0];
 
-				$title = ( !empty($titles) ) ? self::bpf( $titles['POST'], array('posttitle' => $post['title']) ): $post['title'];
+				$title = ( !empty($titles) ) ? BlogPad::bpf( $titles['POST'], array('posttitle' => $post['title']) ): $post['title'];
 
 				$metadata['title'] = $post['title'];
 				$metadata['description'] = $post['description'];
@@ -273,11 +275,11 @@ class BlogPad {
 					$pagenum = 1;
 				}
 
-				$paginate = self::paginate(Post::get_all_posts(), $pagenum);
+				$paginate = BlogPad::paginate(Post::get_all_posts(), $pagenum);
 
 				$posts = $paginate['set'];
 
-				$title = ( !empty($titles) ) ? self::bpf($titles['HOMEPAGE']): self::get_setting('blogname');
+				$title = ( !empty($titles) ) ? BlogPad::bpf($titles['HOMEPAGE']): BlogPad::get_setting('blogname');
 
 				include $pointers['HOMEPAGE'];
 
@@ -289,18 +291,18 @@ class BlogPad {
 					$pagenum = 1;
 				}
 
-				$paginate = self::paginate(Post::get_posts_by($username), $pagenum);
+				$paginate = BlogPad::paginate(Post::get_posts_by($username), $pagenum);
 
 				$posts = $paginate['set'];
 
 				if( empty($posts) ) {
-					self::four_o_four();
+					BlogPad::four_o_four();
 				}
 
 				// for pagination
 				$word = $username;
 
-				$title = ( !empty($titles) ) ? self::bpf( $titles['PROFILE'], array('username' => $username) ): "$username's Profile";
+				$title = ( !empty($titles) ) ? BlogPad::bpf( $titles['PROFILE'], array('username' => $username) ): "$username's Profile";
 
 				include $pointers['PROFILE'];
 
@@ -317,18 +319,18 @@ class BlogPad {
 					$pagenum = 1;
 				}
 
-				$paginate = self::paginate( Post::filter('title', $query), $pagenum );
+				$paginate = BlogPad::paginate( Post::filter('title', $query), $pagenum );
 
 				$posts = $paginate['set'];
 
-				$title = ( !empty($titles) ) ? self::bpf( $titles['SEARCH'], array('searchquery' => $query) ): "Search results for '$query'";
+				$title = ( !empty($titles) ) ? BlogPad::bpf( $titles['SEARCH'], array('searchquery' => $query) ): "Search results for '$query'";
 
 				include $pointers['SEARCH'];
 			break;
 
 			default:
 
-				$title = ( !empty($titles) ) ? self::bpf( $titles['HOMEPAGE'] ): self::get_setting('blogname');
+				$title = ( !empty($titles) ) ? BlogPad::bpf( $titles['HOMEPAGE'] ): BlogPad::get_setting('blogname');
 				
 				include $pointers['HOMEPAGE'];
 			break;
@@ -374,11 +376,11 @@ class BlogPad {
 	}
 
 	private static function autoload($class) {
-		include self::get_setting('base')."/classes/$class.php";
+		include BlogPad::get_setting('base')."/classes/$class.php";
 	}
 
 	static function get_blog_settings() {
-		return self::get_array_from_file(dirname(dirname(__FILE__)).'/settings.php');
+		return BlogPad::get_array_from_file(dirname(dirname(__FILE__)).'/settings.php');
 	}
 
 	/**
@@ -429,7 +431,7 @@ class BlogPad {
 			exit;
 		}
 
-		$settings = self::get_blog_settings();
+		$settings = BlogPad::get_blog_settings();
 
 		return ( !is_null($isval) ) ? isset($settings[$setting]) && !empty($settings[$setting]) && $settings[$setting] === $isval: isset($settings[$setting]) && !empty($settings[$setting]);
 	}
@@ -440,9 +442,9 @@ class BlogPad {
 			exit;
 		}
 
-		$settings = self::get_blog_settings();
+		$settings = BlogPad::get_blog_settings();
 
-		if( self::has_setting($setting) ) {
+		if( BlogPad::has_setting($setting) ) {
 			return $settings[$setting];
 		}
 
@@ -453,9 +455,9 @@ class BlogPad {
 
 	static function four_o_four($message = 'Sorry, you have made an error.', $show_error = true, array $params = array() ) {
 
-		extract( self::extract_globs() );
+		extract( BlogPad::extract_globs() );
 
-		$titles = self::get_setting('titles');
+		$titles = BlogPad::get_setting('titles');
 
 		$stylesheet = $pointers['STYLESHEET'];
 
@@ -476,8 +478,8 @@ class BlogPad {
 
 		else {
 
-			if( self::$current_file !== 'HOMEPAGE' ) {
-				$message .= ' <a href="'.self::get_blog_homepage().'">Go back to the homepage?</a>';
+			if( BlogPad::$current_file !== 'HOMEPAGE' ) {
+				$message .= ' <a href="'.BlogPad::get_blog_homepage().'">Go back to the homepage?</a>';
 			}
 
 			trigger_error($message);
@@ -485,7 +487,7 @@ class BlogPad {
 	}
 
 	static function static_posts_dir() {
-		return ( self::has_setting('static_posts_dir') ) ? self::get_setting('base').'/'.self::get_setting('static_posts_dir'): null;
+		return ( BlogPad::has_setting('static_posts_dir') ) ? BlogPad::get_setting('base').'/'.BlogPad::get_setting('static_posts_dir'): null;
 	}
 
 	/**
@@ -506,14 +508,14 @@ class BlogPad {
 	}
 
 	static function should_init() {
-		return self::get_setting('database') && Query::connected() !== false || self::get_setting('static_posts_dir');
+		return BlogPad::get_setting('database') && Query::connected() !== false || BlogPad::get_setting('static_posts_dir');
 	}
 
 	static function bpf($string, array $placeholders = array()) {
 
 		if( !empty($string) ) {
-			$blogname = self::get_setting('blogname', 'A BlogPad Blog');
-			$blogdescription = self::get_setting('blogdescription', 'An (awesome) blog.');
+			$blogname = BlogPad::get_setting('blogname', 'A BlogPad Blog');
+			$blogdescription = BlogPad::get_setting('blogdescription', 'An (awesome) blog.');
 
 			$posttitle = isset($placeholders['posttitle']) ? $placeholders['posttitle']: '';
 			$category = isset($placeholders['category']) ? $placeholders['category']: '';

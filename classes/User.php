@@ -8,12 +8,12 @@ class User extends BlogPad {
             exit;
         }
 
-        return array_key_exists($username, self::get_setting('accounts'));
+        return array_key_exists($username, BlogPad::get_setting('accounts'));
     }
 
     static function process_login($username = null, $password = null) {
 
-        if( self::logged_in() ) {
+        if( User::logged_in() ) {
             trigger_error('Cannot login again.');
             return false;
         }
@@ -23,7 +23,7 @@ class User extends BlogPad {
             exit;
         }
 
-        if( !self::exists($username) ) {
+        if( !User::exists($username) ) {
             return "User `$username` doesn't exist.";
         }
     }
@@ -35,11 +35,11 @@ class User extends BlogPad {
 
     static function get_info($specifically = null) {
 
-        if( !self::logged_in() ) {
+        if( !User::logged_in() ) {
             return;
         }
 
-        $accounts = self::get_setting('accounts');
+        $accounts = BlogPad::get_setting('accounts');
         $username = $_COOKIE['user'];
 
         if( !array_key_exists($username, $accounts) ) {
@@ -57,7 +57,7 @@ class User extends BlogPad {
     }
 
     static function logout($redirect) {
-        if( self::logged_in() ) {
+        if( User::logged_in() ) {
 
             $user = $_COOKIE['user'];
 
@@ -72,8 +72,8 @@ class User extends BlogPad {
 
     static function is_still_valid() {
 
-        if( self::logged_in() ) {
-            $accounts = self::get_setting('accounts');
+        if( User::logged_in() ) {
+            $accounts = BlogPad::get_setting('accounts');
             $user = $_COOKIE['user'];
 
             return self::exists($user) && isset($accounts[$user]) && $accounts[$user]['username'] = $user && $accounts[$user]['password'] === $_COOKIE["user-$user-password"];
