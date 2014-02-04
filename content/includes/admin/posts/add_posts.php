@@ -187,7 +187,7 @@ if( isset($_POST['p_slug']) ) {
         post_type = '<?php echo isset($post_type) ? $post_type: '';?>',
         date = <?php if(!empty($date)): echo $date; else: ?>''<?php endif;?>,
         categories = '<?php echo isset($categories) ? $categories: '';?>',
-        author = '<?php echo isset($author) ? $author: 'Sharikul';?>';
+        author = '<?php echo isset($author) ? $author: User::get_info('username');?>';
 </script>
 <div id="modal_preview">
 
