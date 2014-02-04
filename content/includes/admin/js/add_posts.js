@@ -120,7 +120,7 @@
   });
 
   categories.keyup(function() {
-    return window.categories += $(this).val();
+    return window.categories = $(this).val();
   });
 
   preview.click(function() {
