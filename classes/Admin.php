@@ -306,7 +306,7 @@ class Admin {
                         return $errors;
                     } 
 
-                    $static_posts_dir = self::static_posts_dir();
+                    $static_posts_dir = BlogPad::static_posts_dir();
 
                     $template = '-- BEGIN METADATA
 Title: %s
