@@ -1,6 +1,6 @@
 <?php
 
-class BP_Parser extends BlogPad {
+class BP_Parser {
 
 	protected static $parts = array(
 		'php_tags',
@@ -416,7 +416,7 @@ class BP_Parser extends BlogPad {
 
 		$after = '<?php endforeach; ?>';
 
-		if( self::has_setting('auto_link', true) ) {
+		if( BlogPad::has_setting('auto_link', true) ) {
 			return preg_replace('/(.*?){\- categories \-}(.*)/', $before.'$1<a href="<?php echo Link_Parser::generate_link("category", array("word" => $category));?>"><?php echo $category;?></a>$2'.$after, $content);
 		}
 
