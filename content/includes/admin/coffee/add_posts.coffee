@@ -113,7 +113,7 @@ _catlist.each (index, value) ->
         no
 
 categories.keyup ->
-    window.categories += $(this).val()
+    window.categories = $(this).val()
 
 preview.click ->
 
