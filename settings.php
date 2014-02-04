@@ -43,13 +43,11 @@ return array(
 	// Specify 'DESC' if you want posts to appear from latest to old, or 'ASC' for the opposite.
 	'post_sort_type' => 'desc',
 
-	// Provide titles for different templates in this array. 
+	// Provide titles for different templates in this array. Read docs/structs/bp-templates.md for assistance.
 	'titles' => array(
 		'HOMEPAGE' => 'Welcome to %blogname%',
 		'POST' => '%posttitle% - %blogname%',
 		'CATEGORY' => 'Posts in category %category%',
-		'SEARCH' => 'Search results for "%searchquery%" - %blogname%',
-		'PROFILE' => "This is %username%'s profile",
 		'ERROR' => "You've errored. Oops"
 	),
 

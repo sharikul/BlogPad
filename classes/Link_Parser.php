@@ -1,6 +1,6 @@
 <?php
 
-class Link_Parser extends BlogPad {
+class Link_Parser {
 
 	/**
 	 * Initializes the class and runs checks on URL's against defined structures.

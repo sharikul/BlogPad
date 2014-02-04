@@ -4,7 +4,7 @@
     <article>
         <h1>{- title -}</h1>
         <h3>{- description -}</h3>
-        <time datetime="{- date: %date%-%month%-%year% -}">Posted on the {- date: %date% -} of {- date: %month%, %year% -}</time> <p style="color: gray; display: inline;">by {- author -}</p>. 
+        <time datetime="{- date: %date%-%month%-%year% -}">Posted on the {- date: %date% -} of {- date: %month%, %year% -}</time> <p style="color: gray;" class="inline">by {- author -}</p>. 
         <hr>
         
         <div id="body">

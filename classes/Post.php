@@ -65,7 +65,7 @@ class Post extends BlogPad {
         }
 
         else {
-            $posts = self::get_all_posts();
+            $posts = Post::get_all_posts();
 
             $key = $args[0];
             $value = $args[1];
@@ -281,7 +281,7 @@ class Post extends BlogPad {
                 $dates[] = $post['date'];
             }
 
-            $sort = ( strtoupper( Post::get_setting('post_sort_type', 'DESC') ) === 'DESC' ) ? SORT_DESC: SORT_ASC; 
+            $sort = ( strtoupper( BlogPad::get_setting('post_sort_type', 'DESC') ) === 'DESC' ) ? SORT_DESC: SORT_ASC; 
 
             // Sort by date now.
             array_multisort($dates, $sort, $posts);
