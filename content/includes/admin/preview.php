@@ -2,7 +2,6 @@
 
 // This script is used to generate a preview on the post editing page. Shouldn't be used as a standalone.
 
-session_start();
 $classes_dir = '../../../classes';
 
 include "$classes_dir/BlogPad.php";
@@ -17,9 +16,9 @@ extract(BlogPad::extract_globs());
 parse_str($_SERVER['QUERY_STRING']);
 
 $post = array(
-    'title' => trim($title),
-    'post' => Parsedown::instance()->parse($content),
-    'description' => $description,
+    'title' => stripslashes( trim($title) ),
+    'post' => stripslashes( Parsedown::instance()->parse($content) ),
+    'description' => stripslashes( $description ),
     'date' => ( trim($date) !== '' ) ? $date: strtotime( date('Y-m-d G:i:s') ),
     'slug' => $slug,
     'updated' => strtotime( date('Y-m-d G:i:s') ),

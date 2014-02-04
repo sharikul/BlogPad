@@ -415,14 +415,7 @@ class BlogPad {
 	}
 
 	static function throw_error( $number, $message, $file, $line ) {
-
-		switch( $number ) {
-			case 8:
-				$message = 'Couldn\'t find variable: '.preg_replace('/Undefined (variable|index)\: /', '', $message);
-			break;
-		}
-
-		echo "<h1 style='font-family: sans-serif !important; padding: 5em;'>$message</h1>";
+		echo "<h1 style='font-family: sans-serif !important; padding: 5em;'>$message -> $line - $file</h1>";
 	}
 
 	static function has_setting($setting = null, $isval = null) {

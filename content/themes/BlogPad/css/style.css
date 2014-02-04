@@ -13,8 +13,8 @@ a {
     text-align: center;
 }
 
-h1, h2, h3, h4, h5, h6, p {
-    font-family: 'Duru Sans', sans-serif;
+h1, h2, h3, h4, h5, h6, p, footer {
+    font-family: sans-serif;
     font-weight: lighter;
 }
 
@@ -32,12 +32,12 @@ header li, .bp-pagination .pagination {
     background: hsla(219, 79%, 66%, 0.16);
     padding: 10px;
     display: inline-block;
-    font-family: 'Duru Sans', sans-serif;
+    font-family: sans-serif;
     border: 1px solid hsla(219, 79%, 10%, 0.16);
     font-weight: bold;
     color: hsla(219, 57%, 25%, 0.81);
     border-radius: 6px;
-    margin-left: 1em;
+    margin-right: 1em;
 }
 
 #categories {
@@ -50,6 +50,10 @@ header li, .bp-pagination .pagination {
     font-family: sans-serif;
     font-size: 1em;
     font-weight: bold;
+}
+
+.categories:hover {
+    color: hsla(0, 0%, 37%, 1);
 }
 
 .categories:after {
@@ -84,6 +88,55 @@ hr {
     margin: 2em auto;
 }
 
+#content article p, .categories {
+    color: hsla(0, 0%, 27%, 1);
+    font-size: 1.2em;
+}
+
+@media only screen and (max-width: 400px) {
+    #content article p, .categories {
+        font-size: 1em;
+    }
+
+    #content article h1 {
+        font-size: 1.5em;
+    }
+
+    #content article h3 {
+        font-size: 1.2em;
+    }
+
+    #metadata h1 {
+        font-size: 1.5em;
+    }
+
+    #metadata h3 {
+        font-size: 1.2em;
+    }
+}
+
+@media only screen and (min-width: 400px and max-width: 750px) {
+    #content article p, .categories {
+        font-size: 1.2em;
+    }
+
+    #content article h1 {
+        font-size: 1.7em;
+    }
+
+    #content article h3 {
+        font-size: 1.4em;
+    }
+
+    #metadata h1 {
+        font-size: 1.7em;
+    }
+
+    #metadata h3 {
+        font-size: 1.4em;
+    }
+}
+
 #content article h1, time {
     color: hsla(0, 14%, 10%, 0.63);
 }
@@ -92,9 +145,9 @@ hr {
     color: hsla(0, 14%, 1%, 0.63);
 }
 
-#content article time {
-    font-family: 'Duru Sans', sans-serif;
-    font-size: .8em;
+.published {
+    font-size: 1em !important;
+    margin: 0 !important;
 }
 
 #content article #body a {
@@ -106,5 +159,4 @@ footer {
     bottom: 0;
     text-align: center;
     padding: 5px;
-    font-family: 'Duru Sans', sans-serif;
 }

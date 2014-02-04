@@ -4,14 +4,15 @@
     <article>
         <h1>{- title -}</h1>
         <h3>{- description -}</h3>
-        <time datetime="{- date: %date%-%month%-%year% -}">Posted on the {- date: %date% -} of {- date: %month%, %year% -}</time> <p style="color: gray;" class="inline">by {- author -}</p>. 
+        <p class="published">Published on the <time datetime="{- date: %date%-%month%-%year% -}">{- date: %date% -} of {- date: %month%, %year% -} </time>by {- author -}.</p> 
         <hr>
         
         <div id="body">
             {- post -}
         </div>
 
-        <p class="inline">Posted in
+        <br>
+        <p class="inline">Categories: 
             <ul class="inline" padding="5px" id="categories">
                 <li class="categories">{- categories -}</li>
             </ul>

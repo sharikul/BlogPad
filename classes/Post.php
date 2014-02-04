@@ -130,6 +130,8 @@ class Post extends BlogPad {
                     // Parsing the post will return an array by default.
                     $posts[ count( $posts ) ] = BP_Parser::parse_bpp( $dir.'/'.$static_post);
 
+                    $posts[ count( $posts ) - 1 ] = array_map('stripslashes', $posts[ count( $posts ) - 1 ]); 
+
                     // The slug will be the name of the static post file. Remove the .bpp extension.
                     $posts[ count( $posts ) - 1]['slug'] = preg_replace('/\.bpp$/', '', $static_post);
 
@@ -140,7 +142,7 @@ class Post extends BlogPad {
                     $posts[ count( $posts ) - 1]['title'] = trim( strip_tags( $posts[ count( $posts ) - 1]['title'] ));
 
                     // Add an excerpt key
-                    $posts[ count( $posts ) - 1]['excerpt'] = Parsedown::instance()->parse( substr($posts[ count( $posts ) - 1]['post'], 0, 200) );
+                    $posts[ count( $posts ) - 1]['excerpt'] = Parsedown::instance()->parse( substr($posts[ count( $posts ) - 1]['post'], 0, 200) ).( strlen($posts[ count( $posts ) - 1]['post']) > 200 ? '...': '');
 
                     // Add when the post was updated using filemtime
                     $posts[ count( $posts ) - 1]['updated'] = filemtime($dir.'/'.$static_post);
@@ -173,6 +175,8 @@ class Post extends BlogPad {
             // MYSQL queries return associative and numerical keys, so let's get rid of them here.
             foreach( $get_posts as $index => $post ) {
 
+                $post = array_map('stripslashes', $post);
+
                 // Loop through the nested array
                 foreach( $post as $column => $value) {
                     if( !is_numeric( $column ) ) {
@@ -196,7 +200,7 @@ class Post extends BlogPad {
 
                     // Add excerpt key
                     if( isset($posts[$index]['post'] ) ) {
-                        $posts[$index]['excerpt'] = Parsedown::instance()->parse( substr($posts[$index]['post'], 0, 200) );
+                        $posts[$index]['excerpt'] = Parsedown::instance()->parse( substr($posts[$index]['post'], 0, 200) ).( strlen($posts[$index]['post']) > 200 ? '...': '');
                     }
                     
                 }
@@ -245,7 +249,6 @@ class Post extends BlogPad {
             }
 
             else if( $db_posts !== serialize(Post::get_db_posts() )) {
-
                 $db_posts = Post::get_db_posts();
 
                 $cache->set('db_posts', serialize($db_posts), 300);
@@ -300,7 +303,7 @@ class Post extends BlogPad {
             exit;
         }
 
-        return POst::filter('author', $user, true);
+        return Post::filter('author', $user, true);
     }
 
     static function get_post_by_title($title = null) {
@@ -318,7 +321,7 @@ class Post extends BlogPad {
 
         $posts = Post::get_all_posts();
 
-        if( isset($posts[$id] ) ) {
+        if( isset($posts[$id]) ) {
             $posts[$id]['id'] = $id;
             return $posts[$id];
         }

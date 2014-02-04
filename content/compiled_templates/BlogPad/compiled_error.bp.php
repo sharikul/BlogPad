@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="<?php echo $stylesheet; ?>">
-    <link href='http://fonts.googleapis.com/css?family=Duru+Sans' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
     <body>
         <header>

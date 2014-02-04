@@ -3,10 +3,9 @@
 {- BEGIN POSTS -}
     <article>
         <h1>{- title -}</h1>
-        <time datetime="{- date: %date%-%month%-%year% -}">Posted on the {- date: %date% -} of {- date: %month%, %year% -}</time>. 
+        <p class="published">Published on the <time datetime="{- date: %date%-%month%-%year% -}">{- date: %date% -} of {- date: %month%, %year% -} </time>by {- author -}.</p>
 
-        <time><strong>Updated on the {- date-updated: %date% -} of {- date-updated: %month%, %year% -}</strong></time>
-        <p>{- excerpt -}</p>
+        <p>{- description -}</p>
     </article>
 {- END POSTS -}
 

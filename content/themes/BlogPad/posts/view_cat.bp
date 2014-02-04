@@ -9,7 +9,7 @@
 {- BEGIN POSTS -}
     <article>
         <h1>{- title -}</h1>
-        <p id="body">{- excerpt -}</p>
+        <p id="body">{- description -}</p>
 
         <p class="inline">
             Posted in 

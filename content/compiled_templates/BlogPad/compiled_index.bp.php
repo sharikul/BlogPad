@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="<?php echo $stylesheet; ?>">
-    <link href='http://fonts.googleapis.com/css?family=Duru+Sans' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
     <body>
         <header>
@@ -24,10 +24,9 @@
 <?php if( !empty($posts) ): foreach($posts as $post): ?>
     <article>
         <h1><a href="<?php echo Link_Parser::generate_link('post', array('slug' => $post['slug']));?>"><?php echo $post['title'];?></a></h1>
-        <time datetime="<?php echo date('jS-F-Y', $post['date']); ?>">Posted on the <?php echo date('jS', $post['date']); ?> of <?php echo date('F, Y', $post['date']); ?></time>. 
+        <p class="published">Published on the <time datetime="<?php echo date('jS-F-Y', $post['date']); ?>"><?php echo date('jS', $post['date']); ?> of <?php echo date('F, Y', $post['date']); ?> </time>by <a href="<?php echo Link_Parser::generate_link('profile', array('slug' => $post['author']));?>"><?php echo $post['author'];?></a>.</p>
 
-        <time><strong>Updated on the <?php echo date('jS', $post['updated']); ?> of <?php echo date('F, Y', $post['updated']); ?></strong></time>
-        <p><?php echo $post['excerpt']; ?></p>
+        <p><?php echo $post['description']; ?></p>
     </article>
 <?php endforeach; else: echo BlogPad::get_setting('no_post_message', 'Nothing to see here!'); endif; ?>
 

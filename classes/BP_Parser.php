@@ -254,7 +254,7 @@ class BP_Parser {
 	 * 
 	 */
 
-	protected static function gen($file) {
+	static function gen($file) {
 
 		$compile = BP_Parser::compile($file);
 
@@ -332,7 +332,7 @@ class BP_Parser {
 			foreach( $_parts as $index => $__part ) {
 
 				if( !is_file("$root/$__part.bp") ) {
-					trigger_error("Couldn't load part '$__part' (.bp) as it wasn't found in $root.", E_USER_ERROR);
+					trigger_error("Couldn't load part '$__part.bp' as it wasn't found in $root.", E_USER_ERROR);
 					exit;
 				}
 

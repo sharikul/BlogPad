@@ -5,11 +5,11 @@ class Admin {
 
         date_default_timezone_set( BlogPad::get_setting('timezone', 'Europe/London') );
 
-	spl_autoload_register('Admin::autoload');
+	    spl_autoload_register('Admin::autoload');
 
         set_error_handler('BlogPad::throw_error');
 
-	session_start();
+	    session_start();
 
         if( !User::logged_in() ) {
             header('Location: '.BlogPad::get_blog_homepage().'/admin/login.php');
@@ -145,6 +145,8 @@ class Admin {
 
 			}
 		}
+
+        Admin::load_part('footer');
     }
 
 	protected static function autoload($class) {
