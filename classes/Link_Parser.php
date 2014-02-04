@@ -16,7 +16,7 @@ class Link_Parser {
 
 			if( preg_match("/$regex/", Link_Parser::current_uri() ) ) {
 
-				$params = preg_replace("/$regex/", $actions['params'], BlogPad::current_uri() );
+				$params = preg_replace("/$regex/", $actions['params'], Link_Parser::current_uri() );
 
 				if( !strpos($params, '&') ) {
 					$explode = explode('=', $params);
