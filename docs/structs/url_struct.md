@@ -51,7 +51,7 @@ Now, the paragraph above may sound confusing, so here's a table hoping to clear 
 | `%num%` | `{- PATTERN: post/%slug%/%num%/, TEMPLATE: POST -}` | No | The use of the `%num%` content tag has no purpose here. Additionally, since the content tag was optionalised, BlogPad won't be able to generate links successfully. |
 
 ## Word before numbers, or just slug
-BlogPad uses baked in prewritten query strings that are used to power the application. Here is the implementations, in PHP:
+BlogPad uses baked in prewritten query strings that are used to power the application. Here's the implementation:
 
 ```php
 $params = array(
