@@ -34,8 +34,6 @@ if( isset($_POST['username']) ) {
         }
 
         else {
-
-            session_start();
             // Sign the user in!
             User::login($username, $pword);
 
@@ -140,12 +138,9 @@ if( isset($_POST['username']) ) {
     </form>
 
     <script>
-        var username = document.getElementById('username'),
-            password = document.getElementById('password'),
-            submit = document.getElementById('submit');
 
-        submit.onclick = function() {
-            return username.value.trim() !== '' && password.value.trim() !== '';
+        document.getElementById('submit').onclick = function() {
+            return document.getElementById('username').value.trim() !== '' && document.getElementById('password').value.trim() !== '';
         }
 
     </script>
