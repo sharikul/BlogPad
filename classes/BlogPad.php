@@ -148,7 +148,7 @@ class BlogPad {
 	}
 
 	static function get_templates_dir() {
-		return BlogPad::get_setting('base').'/content/compiled_templates';
+		return BlogPad::get_setting('base').'/content/compiled_themes';
 	}
 
 	static function get_theme_dir() {
@@ -222,7 +222,7 @@ class BlogPad {
 	 * Handles the loading of theme templates.
 	 * 
 	 */
-	  
+
 	static function load_page($page = null, array $params = array() ) {
 		if( is_null($page) ) {
 			trigger_error('Please provide a page to load.', E_USER_ERROR);
