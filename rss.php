@@ -15,20 +15,26 @@ if( BlogPad::has_setting('database') ) {
 }
 
 $has_posts = count( Post::get_all_posts() ) > 0;
+$paginate = false;
 
 if( $has_posts ) {
-    $pagenum = ( isset($_REQUEST['pagenum']) ) ? (int) $_REQUEST['pagenum']: 1;
-    $posts = BlogPad::paginate( Post::get_all_posts(), $pagenum );
-    $posts = $posts['set'];
+
+    $posts = Post::get_all_posts();
+
+    if( isset($_REQUEST['pagenum']) ) {
+        $paginate = true;
+        $pagenum = (int) $_REQUEST['pagenum'];
+    }
 
     if( isset($_REQUEST['user']) ) {
-        $posts = BlogPad::paginate( Post::get_posts_by($_REQUEST['user']), $pagenum );
-        $posts = $posts['set'];
+        $posts = Post::get_posts_by( $_REQUEST['user'] );
+    }
 
-        if( empty($posts) ) {
-            $has_posts = false;
-            break;
-        }
+    $posts = ( $paginate ) ? BlogPad::paginate( $posts, $pagenum ): $posts;
+    $posts = isset($posts['set']) ? $posts['set']: $posts;
+
+    if( empty($posts) ) {
+        $have_posts = false;
     }
 }
 
