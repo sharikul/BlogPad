@@ -102,3 +102,25 @@ In patterns, you can make use of _content tags_ (_those things that start and en
 | `%word%` | `[A-z%0-9\_\s]+` |
 | `%slug%` | `[\w\-]+` |
 | `%num%` | `[0-9]+` |
+
+#### Mammoth questioning
+Noticed this line in the example URL struct?
+```
+{- PATTERN: category/%word%/%num%?/?, TEMPLATE: CATEGORY -}
+```
+
+It starts off fine, but then everything seems to get question marked out. Essentially, this enables visitors to visit a link like `category/category/` and view the content of the `CATEGORY` template delegated. Additionally, since the content of a category template will be affected by pagination, it enables visitors to view a wide range of posts spanning over pages, so visitors can visit a link like `category/category/2` and the posts shown will be altered for pagination.
+
+The reason for question marking out the end characters is so that URL's for categories can still be generated without requiring a page number to be specified. So in events when a visitor should be directed to the categories template (_where they are able to view posts filtered out by a specific category_), a link like `http://base/category/category/` will be generated. In the event when a visitor should switch pages of the same link through a page number, a link such a `http://base/category/category/2` will be generated.
+
+Because BlogPad generates link logically, you will not need to handle the generation of links of your own.
+
+#### Slug for posts, word for everything else
+Because BlogPad enforces pretty URL's, it expects links that delegate the `POST` template to use the `%slug%` content tag, as posts should be accessed through slugs. However, for other templates, it expects `%word%` to be used, with `%num%` optionally thrown in.
+
+Now, the paragraph above may sound confusing, so here's a table hoping to clear up confusions:
+| Content tag | Usage | Correct? | Why? |
+| ----------- | ----- | -------- | ---- |
+| `%slug%` | `{- PATTERN: p/%slug%/, TEMPLATE: POST -}` | Yes | An individual post must be accessed through its slug. |
+| `%word%` | `{- PATTERN: p/%word%/, TEMPLATE: POST -}` | No | Though it _can_ possibly work, BlogPad won't be able to generate a link to a post successfully as it expects to replace the `%slug%` content tag with the slug of a post. Additionally, since spaces in slugs are to be separated by hyphens, the `%word%` content tag doesn't take that into consideration. |
+| `%word%` | `{- PATTERN: category/%word%/, TEMPLATE: CATEGORY -}` | Yes | Categories shouldn't really contain symbols, and therefore BlogPad expects categories to be words, with the occasional space if required.
