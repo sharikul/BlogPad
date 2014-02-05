@@ -119,6 +119,7 @@ Because BlogPad generates link logically, you will not need to handle the genera
 Because BlogPad enforces pretty URL's, it expects links that delegate the `POST` template to use the `%slug%` content tag, as posts should be accessed through slugs. However, for other templates, it expects `%word%` to be used, with `%num%` optionally thrown in.
 
 Now, the paragraph above may sound confusing, so here's a table hoping to clear up confusions:
+
 | Content tag | Usage | Correct? | Why? |
 | ----------- | ----- | -------- | ---- |
 | `%slug%` | `{- PATTERN: p/%slug%/, TEMPLATE: POST -}` | Yes | An individual post must be accessed through its slug. |
