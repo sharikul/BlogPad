@@ -34,7 +34,7 @@ It starts off fine, but then everything seems to get question marked out. Essent
 
 The reason for question marking out the end characters is so that URL's for categories can still be generated without requiring a page number to be specified. So in events when a visitor should be directed to the categories template (_where they are able to view posts filtered out by a specific category_), a link like `http://base/category/category/` will be generated. In the event when a visitor should switch pages of the same link through a page number, a link such a `http://base/category/category/2` will be generated.
 
-Because BlogPad generates link logically, you will not need to handle the generation of links of your own.
+Because BlogPad generates link logically, you will not need to handle the generation of links on your own.
 
 ## Slug for posts, word for everything else
 Because BlogPad enforces pretty URL's, it expects links that delegate the `POST` template to use the `%slug%` content tag, as posts should be accessed through slugs. However, for other templates, it expects `%word%` to be used, with `%num%` optionally thrown in.
