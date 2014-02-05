@@ -123,4 +123,4 @@ Now, the paragraph above may sound confusing, so here's a table hoping to clear 
 | ----------- | ----- | -------- | ---- |
 | `%slug%` | `{- PATTERN: p/%slug%/, TEMPLATE: POST -}` | Yes | An individual post must be accessed through its slug. |
 | `%word%` | `{- PATTERN: p/%word%/, TEMPLATE: POST -}` | No | Though it _can_ possibly work, BlogPad won't be able to generate a link to a post successfully as it expects to replace the `%slug%` content tag with the slug of a post. Additionally, since spaces in slugs are to be separated by hyphens, the `%word%` content tag doesn't take that into consideration. |
-| `%word%` | `{- PATTERN: category/%word%/, TEMPLATE: CATEGORY -}` | Yes | Categories shouldn't really contain symbols, and therefore BlogPad expects categories to be words, with the occasional space if required.
+| `%word%` | `{- PATTERN: category/%word%/, TEMPLATE: CATEGORY -}` | Yes | Categories shouldn't really contain symbols, and therefore BlogPad expects categories to be words, with the occasional space if required. |
