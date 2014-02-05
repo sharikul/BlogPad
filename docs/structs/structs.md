@@ -127,4 +127,17 @@ Now, the paragraph above may sound confusing, so here's a table hoping to clear 
 | `%word%` | `{- PATTERN: category/%word%/, TEMPLATE: CATEGORY -}` | Yes | Categories shouldn't really contain symbols, and therefore BlogPad expects categories to be words, with the occasional space if required. |
 | `%num%` | `{- PATTERN: category/%word%/%num%?/?, TEMPLATE: CATEGORY -}` | Yes | `%num%` is being optionalised through question marking and therefore BlogPad knows that the pattern **_can_** contain a number at the end, but it's not always going to be required. |
 | `%num%` | `{- PATTERN: post/%num%/, TEMPLATE: POST -}` | No | Posts cannot be accessed through a number, i.e. their ID. |
-| `%num%` | `{- PATTERN: post/%slug%/%num%/, TEMPLATE: POST -}` | No | The use of the `%num%` content tag has no purpose here. Additionally, since the content tag was optionalised, BlogPad won't be able to generate links successfully. | 
+| `%num%` | `{- PATTERN: post/%slug%/%num%/, TEMPLATE: POST -}` | No | The use of the `%num%` content tag has no purpose here. Additionally, since the content tag was optionalised, BlogPad won't be able to generate links successfully. |
+
+#### Word before numbers, or just slug
+BlogPad uses prewritten query strings that are used to power the application. These are the query strings (_defined in BP_Parser.php_):
+
+```php
+$params = array(
+  'CATEGORY' => 'word=$1&pagenum=$2',
+  'POST' => '_post=$1',
+  'HOMEPAGE' => 'pagenum=$1',
+  'PROFILE' => 'username=$1&pagenum=$2',
+  'SEARCH' => 'query=$1&pagenum=$2'
+);
+``` 
