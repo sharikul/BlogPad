@@ -72,7 +72,7 @@ As you can see, the query string of templates which can take page numbers make `
 Is correct.
 
 ```
-{- PATTERN: category-is-%word%-?a?n?d?-?-?p?a?g?e?-?i?s?-?%num%?/?, TEMPLATE: CATEGORY -} // please don't create links like this :)
+{- PATTERN: category-is-%word%-?a?n?d?-?p?a?g?e?-?i?s?-?%num%?/?, TEMPLATE: CATEGORY -} // please don't create links like this :)
 ```
 
 Is also correct.
