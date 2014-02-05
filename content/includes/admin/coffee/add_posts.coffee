@@ -121,7 +121,7 @@ preview.click ->
     if all_fields_complete()
         $('#postname').text title.val().trim()
 
-        $.get '../content/includes/admin/preview.php',
+        $.post '../content/includes/admin/preview.php',
             title: title.val().trim()
             content: post_content.val()
             description: description.val().trim()

@@ -126,7 +126,7 @@
   preview.click(function() {
     if (all_fields_complete()) {
       $('#postname').text(title.val().trim());
-      return $.get('../content/includes/admin/preview.php', {
+      return $.post('../content/includes/admin/preview.php', {
         title: title.val().trim(),
         content: post_content.val(),
         description: description.val().trim(),

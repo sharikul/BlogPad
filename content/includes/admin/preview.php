@@ -13,17 +13,15 @@ include "$classes_dir/Link_Parser.php";
 
 extract(BlogPad::extract_globs());
 
-parse_str($_SERVER['QUERY_STRING']);
-
 $post = array(
-    'title' => stripslashes( trim($title) ),
-    'post' => stripslashes( Parsedown::instance()->parse($content) ),
-    'description' => stripslashes( $description ),
-    'date' => ( trim($date) !== '' ) ? $date: strtotime( date('Y-m-d G:i:s') ),
-    'slug' => $slug,
+    'title' => stripslashes( trim($_POST['title']) ),
+    'post' => stripslashes( Parsedown::instance()->parse($_POST['content']) ),
+    'description' => stripslashes( $_POST['description'] ),
+    'date' => ( trim($_POST['date']) !== '' ) ? $_POST['date']: strtotime( date('Y-m-d G:i:s') ),
+    'slug' => $_POST['slug'],
     'updated' => strtotime( date('Y-m-d G:i:s') ),
-    'categories' => BlogPad::list_to_ser($categories),
-    'author' => (trim($author) !== '') ? $author: User::get_info('username')
+    'categories' => BlogPad::list_to_ser($_POST['categories']),
+    'author' => (trim($_POST['author']) !== '') ? $_POST['author']: User::get_info('username')
 );
 
 $stylesheet = $pointers['STYLESHEET'];
