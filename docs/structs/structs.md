@@ -130,7 +130,7 @@ Now, the paragraph above may sound confusing, so here's a table hoping to clear 
 | `%num%` | `{- PATTERN: post/%slug%/%num%/, TEMPLATE: POST -}` | No | The use of the `%num%` content tag has no purpose here. Additionally, since the content tag was optionalised, BlogPad won't be able to generate links successfully. |
 
 #### Word before numbers, or just slug
-BlogPad uses prewritten query strings that are used to power the application. These are the query strings (_defined in BP_Parser.php_):
+BlogPad uses baked in prewritten query strings that are used to power the application. Here is the implementations, in PHP:
 
 ```php
 $params = array(
@@ -141,3 +141,23 @@ $params = array(
   'SEARCH' => 'query=$1&pagenum=$2'
 );
 ``` 
+
+As you can see, the query string of templates which can take page numbers make `pagenum` the second parameter passed. This means that in your URL's, `%word%`'s must come **before** `%num%`, if any. 
+
+```
+{- PATTERN: category/%word%/%num%?/?, TEMPLATE: CATEGORY -}
+```
+
+Is correct.
+
+```
+{- PATTERN: category-is-%word%-?a?n?d?-?-?p?a?g?e?-?i?s?-?%num%?/?, TEMPLATE: CATEGORY -} // please don't create links like this :)
+```
+
+Is also correct.
+
+```
+{- PATTERN: category/%num%/%word%, TEMPLATE: CATEGORY -}
+```
+
+Is not correct.
