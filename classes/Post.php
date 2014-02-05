@@ -3,7 +3,7 @@
 class Post extends BlogPad {
 
     static function can_static_post() {
-        return ( !is_null(BlogPad::static_posts_dir()) );
+        return ( !is_null(BlogPad::static_posts_dir()) && is_dir(BlogPad::static_posts_dir()) && is_writable(BlogPad::static_posts_dir()) );
     }
 
     static function can_db_post() {
@@ -50,6 +50,14 @@ class Post extends BlogPad {
     static function max_posts($default = 5) {
         return ( BlogPad::has_setting('posts_per_page') ) && is_numeric( BlogPad::get_setting('posts_per_page') ) ? (int) BlogPad::get_setting('posts_per_page'): $default;
     }
+
+    /**
+     * Enables the filtering of a results set. 
+     * 
+     * Method doesn't take arguments for flexibility.
+     * @return array
+     * 
+     */ 
 
     static function filter() {
 

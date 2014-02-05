@@ -2,9 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><?php echo $title; ?></title>
+    <title><?php echo $title; ?> - HI</title>
     <link rel="stylesheet" href="<?php echo $stylesheet; ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+<?php if(BlogPad::$current_file === 'POST'): ?>
+    <meta name="description" content="<?php echo $metadata['description']; ?>">
+<?php else: ?>
+    <meta name="description" content="<?php echo $metadata['blogdescription']; ?>">
+<?php endif;?>
 </head>
     <body>
         <header>
@@ -49,6 +54,6 @@
 </div>
 
     </div>
-    <footer>Powered by BlogPad. Theme <strong>BlogPad</strong> by <a href="http://sharikul.comyr.com">Sharikul Islam</a>.</footer>
+    <footer>Powered by BlogPad. &copy; 2014 <?php echo $metadata['blogname']; ?></footer>
 </body>
 </html>

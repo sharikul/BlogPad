@@ -2,9 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{- VAR title -}</title>
+    <title>{- VAR title -} - HI</title>
     <link rel="stylesheet" href="{- VAR stylesheet -}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+{- WHEN 'POST' -}
+    <meta name="description" content="{- metadata: description -}">
+{- ELSE -}
+    <meta name="description" content="{- metadata: blogdescription -}">
+{- END WHEN -}
 </head>
     <body>
         <header>

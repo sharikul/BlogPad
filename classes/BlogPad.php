@@ -8,6 +8,11 @@ class BlogPad {
 
 	static $current_file = 'HOMEPAGE';
 
+	/**
+	 * Executes BlogPad and gets the environment set up.
+	 * 
+	 */ 
+
 	static function load() {
 
 		set_error_handler('BlogPad::throw_error');
@@ -88,6 +93,12 @@ class BlogPad {
 		}
 	}
 
+	/**
+	 * Converts a comma separated list of values in a string into a serialized string.
+	 * @return string
+	 * 
+	 */ 
+
 	static function list_to_ser($list = null) {
         if( is_null($list) ) {
             trigger_error('Please provide a string to process.', E_USER_ERROR);
@@ -114,6 +125,12 @@ class BlogPad {
             return serialize( array( trim( $list ) ) );
         }
     }
+
+    /**
+     * Converts a serialized string into a comma separated list string if applicable.
+     * @return string
+     * 
+     */ 
 
     static function ser_to_list($ser = null) {
     	if( is_null($ser) ) {
@@ -182,15 +199,30 @@ class BlogPad {
 		return $pointers;
 	}
 
+	/**
+	 * Enables commonly used variables to be extracted from one call. Should be called with extract()
+	 * @return array
+	 * 
+	 */ 
+
 	static function extract_globs() {
 		return array(
 			'pointers' => BlogPad::get_pointers(),
 			'settings' => BlogPad::get_blog_settings(),
 			'homepage' => BlogPad::get_blog_homepage(),
-			'includes_dir' => BlogPad::get_blog_homepage().'/content/includes'
+			'includes_dir' => BlogPad::get_blog_homepage().'/content/includes',
+			'metadata' => array(
+				'blogname' => BlogPad::get_setting('blogname', 'BlogPad Blog'),
+				'blogdescription' => BlogPad::get_setting('blogdescription', 'A BlogPad Blog')
+			)
 		);
 	}
 
+	/**
+	 * Handles the loading of theme templates.
+	 * 
+	 */
+	  
 	static function load_page($page = null, array $params = array() ) {
 		if( is_null($page) ) {
 			trigger_error('Please provide a page to load.', E_USER_ERROR);
@@ -213,14 +245,13 @@ class BlogPad {
 
 				$posts = array();
 
-				$metadata = array();
-
 				$category = $word;
 
 				if( !array_key_exists($category, $settings['categories']) ) {
 					BlogPad::four_o_four();
 				}
 
+				// $metadata has been created from extract_globs()
 				$metadata['title'] = trim($category);
 				$metadata['description'] = $settings['categories'][$category];
 
@@ -255,8 +286,6 @@ class BlogPad {
 				if( empty( $post ) ) {
 					BlogPad::four_o_four();
 				}
-
-				$metadata = array();
 
 				$post = $post[0];
 
@@ -327,14 +356,6 @@ class BlogPad {
 
 				include $pointers['SEARCH'];
 			break;
-
-			default:
-
-				$title = ( !empty($titles) ) ? BlogPad::bpf( $titles['HOMEPAGE'] ): BlogPad::get_setting('blogname');
-				
-				include $pointers['HOMEPAGE'];
-			break;
-
 		}
 		
 	}

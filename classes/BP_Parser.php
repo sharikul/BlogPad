@@ -327,18 +327,16 @@ class BP_Parser {
 
 		if( !empty($gets[0]) ) {
 
-			$_parts = $gets[1];
+			foreach( $gets[1] as $index => $part ) {
 
-			foreach( $_parts as $index => $__part ) {
-
-				if( !is_file("$root/$__part.bp") ) {
-					trigger_error("Couldn't load part '$__part.bp' as it wasn't found in $root.", E_USER_ERROR);
+				if( !is_file("$root/$part.bp") ) {
+					trigger_error("Couldn't load part '$part.bp' as it wasn't found in $root.", E_USER_ERROR);
 					exit;
 				}
 
 				// Since there's no telling what can be in an included template, let's just run the whole process over again.
-				foreach( BP_Parser::$parts as $part ) {
-					$content = str_replace($gets[0][$index], call_user_func("BP_Parser::handle_$part", file_get_contents("$root/$__part.bp"), dirname("$root/$__part.bp") ), $content);
+				foreach( BP_Parser::$parts as $_part ) {
+					$content = str_replace($gets[0][$index], call_user_func("BP_Parser::handle_$_part", file_get_contents("$root/$part.bp"), dirname("$root/$part.bp") ), $content);
 				}
 			}
 
@@ -536,7 +534,7 @@ class BP_Parser {
 	 */
 
 	protected static function handle_metas($content) {
-		return preg_replace('/{\- metadata: (title|description|id) \-}/', '<?php echo $metadata[\'$1\']; ?>', $content);
+		return preg_replace('/{\- metadata: (title|description|id|blogname|blogdescription) \-}/', '<?php echo $metadata[\'$1\']; ?>', $content);
 	}
 
 	protected static function handle_pagination($content) {
@@ -585,7 +583,23 @@ class BP_Parser {
 	}
 
 	protected static function handle_when($contents) {
-		return preg_replace('/{- WHEN ([\'"].*?[\'"]) -}(.*?){- END WHEN -}/s', '<?php if(BlogPad::$current_file === $1):?>$2<?php endif;?>', $contents);
+
+		preg_match_all('/{- WHEN ([\'"].*?[\'"]) -}(.*?){- END WHEN -}/s', $contents, $whens);
+
+		if( !empty($whens[0][0]) ) {
+			foreach( $whens[0] as $index => $cond ) {
+				$check = $whens[1][$index];
+
+				$ontrue = $whens[2][$index];
+
+				$ontrue = preg_replace('/{- ELSE WHEN ([\'"].*?[\'"]) -}/', '<?php elseif(BlogPad::$current_file === $1): ?>', $ontrue);
+				$ontrue = str_replace('{- ELSE -}', '<?php else: ?>', $ontrue);
+
+				$contents = str_replace($whens[0][$index], "<?php if(BlogPad::\$current_file === $check): ?>$ontrue<?php endif;?>", $contents);
+			}
+		}
+
+		return $contents;
 	}
 }
 
