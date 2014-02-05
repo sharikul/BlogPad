@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><?php echo $title; ?> - HI</title>
+    <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="<?php echo $stylesheet; ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 <?php if(BlogPad::$current_file === 'POST'): ?>

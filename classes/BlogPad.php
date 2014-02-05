@@ -160,7 +160,7 @@ class BlogPad {
 	}
 
 	static function get_file_struct() {
-		return BP_Parser::parse_bpd( BlogPad::get_theme_dir().'/struct.bpd');
+		return BP_Parser::parse_bpd(BlogPad::get_theme_dir().'/struct.bpd');
 	}
 
 	static function get_url_struct($raw = false) {
