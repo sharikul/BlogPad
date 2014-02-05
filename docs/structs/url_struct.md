@@ -82,3 +82,9 @@ Is also correct.
 ```
 
 Is not correct.
+
+```
+{- PATTERN: post/%slug%/%num%?/?, TEMPLATE: POST -}
+```
+
+Is correct, but should end at `%slug%`. 
