@@ -44,7 +44,7 @@
         font-size: 1.5em;
     }
 
-    input[type=text], textarea {
+    input[type=text] {
         width: 65%;
         background: lighten(beige, 2%);
         padding: 5px;
@@ -55,7 +55,6 @@
             size: .6em;
         }
         margin-top: 12px;
-        resize: none;
     }
 
 }

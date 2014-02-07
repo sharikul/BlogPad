@@ -233,7 +233,7 @@ header li {
   margin: 10px;
   font-size: 1.5em;
 }
-#toolbox input[type=text], #toolbox textarea {
+#toolbox input[type=text] {
   width: 65%;
   background: #f7f7e4;
   padding: 5px;
@@ -242,7 +242,6 @@ header li {
   font-family: open-sans, sans-serif;
   font-size: .6em;
   margin-top: 12px;
-  resize: none;
 }
 
 #messages {
