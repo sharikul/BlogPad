@@ -93,6 +93,11 @@ hr {
     font-size: 1.2em;
 }
 
+#content #body img {
+    margin: 1em auto;
+    width: 95%;
+}
+
 @media only screen and (max-width: 400px) {
     #content article p, .categories {
         font-size: 1em;

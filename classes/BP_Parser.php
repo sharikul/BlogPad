@@ -592,10 +592,10 @@ class BP_Parser {
 
 				$ontrue = $whens[2][$index];
 
-				$ontrue = preg_replace('/{- ELSE WHEN ([\'"].*?[\'"]) -}/', '<?php elseif(BlogPad::$current_file === $1): ?>', $ontrue);
+				$ontrue = preg_replace('/{- ELSE WHEN ([\'"].*?[\'"]) -}/', '<?php elseif(BlogPad::$template === $1): ?>', $ontrue);
 				$ontrue = str_replace('{- ELSE -}', '<?php else: ?>', $ontrue);
 
-				$contents = str_replace($whens[0][$index], "<?php if(BlogPad::\$current_file === $check): ?>$ontrue<?php endif;?>", $contents);
+				$contents = str_replace($whens[0][$index], "<?php if(BlogPad::\$template === $check): ?>$ontrue<?php endif;?>", $contents);
 			}
 		}
 

@@ -34,7 +34,7 @@ class Link_Parser {
 					}
 				}
 
-				BlogPad::$to_load = $actions['template'];
+				BlogPad::$template = $actions['template'];
 
 			}
 

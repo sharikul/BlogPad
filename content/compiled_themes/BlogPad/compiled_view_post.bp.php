@@ -5,11 +5,13 @@
     <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="<?php echo $stylesheet; ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<?php if(BlogPad::$current_file === 'POST'): ?>
+<?php if(BlogPad::$template === 'POST'): ?>
     <meta name="description" content="<?php echo $metadata['description']; ?>">
 <?php else: ?>
     <meta name="description" content="<?php echo $metadata['blogdescription']; ?>">
 <?php endif;?>
+
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $homepage; ?>/rss.php">
 </head>
     <body>
         <header>

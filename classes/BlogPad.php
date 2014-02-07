@@ -4,9 +4,7 @@ class BlogPad {
 
 	static $vars = array();
 
-	static $to_load = '';
-
-	static $current_file = 'HOMEPAGE';
+	static $template = 'HOMEPAGE';
 
 	/**
 	 * Executes BlogPad and gets the environment set up.
@@ -54,15 +52,17 @@ class BlogPad {
 
 		$structure = BlogPad::get_file_struct();
 
+		if( empty($structure) ) {
+			trigger_error("BlogPad couldn't find structures in $folder/struct.bpd.", E_USER_ERROR);
+			exit;
+		}
+
 		if( !isset($structure['paths']['URL_STRUCT']) ) {
 			trigger_error("URL definition file has not been defined in $folder/struct.bpd.", E_USER_ERROR);
 			exit;
 		}
 
-		if( empty($structure) ) {
-			trigger_error("BlogPad couldn't find structures in $folder/struct.bpd.", E_USER_ERROR);
-			exit;
-		}
+		
 
 		if( empty($structure['paths']) ) {
 			trigger_error("BlogPad couldn't find any file structures defined in $folder/struct.bpd.", E_USER_ERROR);
@@ -75,22 +75,9 @@ class BlogPad {
 			exit;
 		}
 
-		$pointers = BlogPad::get_pointers();
-
-		// Link_Parser will populate BlogPad::$vars as well as insert a pointer in BlogPad::$to_load
 		Link_Parser::load();
 
-		if( !empty(BlogPad::$to_load) ) {
-
-			BlogPad::$current_file = BlogPad::$to_load;
-			
-			BlogPad::load_page($pointers[BlogPad::$to_load], BlogPad::$vars); 
-		}
-
-		else {
-			BlogPad::$current_file = 'HOMEPAGE';
-			BlogPad::load_page($pointers['HOMEPAGE'], BlogPad::$vars);
-		}
+		BlogPad::load_page(BlogPad::$template, BlogPad::$vars);
 	}
 
 	/**
@@ -240,7 +227,7 @@ class BlogPad {
 		$js_includes = $includes_dir.'/js/';
 		$css_includes = $includes_dir.'/css/';
 
-		switch( BlogPad::$current_file ) {
+		switch( $page ) {
 			case 'CATEGORY':
 
 				$posts = array();
@@ -436,7 +423,7 @@ class BlogPad {
 	}
 
 	static function throw_error( $number, $message, $file, $line ) {
-		echo "<h1 style='font-family: sans-serif !important; padding: 5em;'>$message -> $line - $file</h1>";
+		echo "<h1 style='font-family: sans-serif !important; padding: 5em;'>$message</h1>";
 	}
 
 	static function has_setting($setting = null, $isval = null) {
