@@ -11,7 +11,7 @@ class BlogPad {
 	 * 
 	 */ 
 
-	static function load() {
+	public static function load() {
 
 		set_error_handler('BlogPad::throw_error');
 
@@ -86,7 +86,7 @@ class BlogPad {
 	 * 
 	 */ 
 
-	static function list_to_ser($list = null) {
+	public static function list_to_ser($list = null) {
         if( is_null($list) ) {
             trigger_error('Please provide a string to process.', E_USER_ERROR);
             exit;
@@ -119,7 +119,7 @@ class BlogPad {
      * 
      */ 
 
-    static function ser_to_list($ser = null) {
+    public static function ser_to_list($ser = null) {
     	if( is_null($ser) ) {
     		trigger_error('Please provide a serialized string to process.', E_USER_ERROR);
     		exit;
@@ -130,33 +130,33 @@ class BlogPad {
     	return ( count($conv) === 1 ) ? $conv[0]: implode(', ', $conv);
     }
 
-	static function get_theme_name() {
+	public static function get_theme_name() {
 		return BlogPad::get_setting('using');
 	}
 
-	static function get_templates_dir() {
+	public static function get_templates_dir() {
 		return BlogPad::get_setting('base').'/content/compiled_themes';
 	}
 
-	static function get_theme_dir() {
+	public static function get_theme_dir() {
 		return BlogPad::get_setting('base').'/content/themes/'.BlogPad::get_setting('using');
 	}
 
-	static function get_blog_homepage() {
+	public static function get_blog_homepage() {
 		return 'http://'.rtrim($_SERVER['HTTP_HOST'].'/'.basename( BlogPad::get_setting('base') ), '/');
 	}
 
-	static function get_file_struct() {
+	public static function get_file_struct() {
 		return BP_Parser::parse_bpd(BlogPad::get_theme_dir().'/struct.bpd');
 	}
 
-	static function get_url_struct($raw = false) {
+	public static function get_url_struct($raw = false) {
 		$struct = BlogPad::get_file_struct();
 
 		return BP_Parser::parse_bpd( BlogPad::get_theme_dir().'/'.$struct['paths']['URL_STRUCT'], $raw);
 	}
 
-	static function get_pointers() {
+	protected static function get_pointers() {
 		$structure = BlogPad::get_file_struct();
 
 		$folder = BlogPad::get_theme_dir();
@@ -192,7 +192,7 @@ class BlogPad {
 	 * 
 	 */ 
 
-	static function extract_globs() {
+	public static function extract_globs() {
 		return array(
 			'pointers' => BlogPad::get_pointers(),
 			'settings' => BlogPad::get_blog_settings(),
@@ -210,7 +210,7 @@ class BlogPad {
 	 * 
 	 */
 
-	static function load_page($page = null, array $params = array() ) {
+	protected static function load_page($page = null, array $params = array() ) {
 		if( is_null($page) ) {
 			trigger_error('Please provide a page to load.', E_USER_ERROR);
 			exit;
@@ -347,7 +347,7 @@ class BlogPad {
 		
 	}
 
-	static function get_array_from_file($file = null) {
+	protected static function get_array_from_file($file = null) {
 		if( is_null($file) ) {
 			trigger_error('Please provide a file to extract data from before continuing.', E_USER_ERROR);
 			exit;
@@ -383,11 +383,11 @@ class BlogPad {
 		}
 	}
 
-	private static function autoload($class) {
+	protected static function autoload($class) {
 		include BlogPad::get_setting('base')."/classes/$class.php";
 	}
 
-	static function get_blog_settings() {
+	protected static function get_blog_settings() {
 		return BlogPad::get_array_from_file(dirname(dirname(__FILE__)).'/settings.php');
 	}
 
@@ -398,7 +398,7 @@ class BlogPad {
 	 * 
 	 */
 
-	static function paginate(array $posts = array(), $current_page = 1) {
+	protected static function paginate(array $posts = array(), $current_page = 1) {
 
 		if( $current_page <= 0 ) {
 			$current_page = 1;
@@ -422,11 +422,11 @@ class BlogPad {
 		);
 	}
 
-	static function throw_error( $number, $message, $file, $line ) {
+	protected static function throw_error( $number, $message, $file, $line ) {
 		echo "<h1 style='font-family: sans-serif !important; padding: 5em;'>$message</h1>";
 	}
 
-	static function has_setting($setting = null, $isval = null) {
+	public static function has_setting($setting = null, $isval = null) {
 		if( is_null($setting) ) {
 			trigger_error('Please provide a setting to check.', E_USER_ERROR);
 			exit;
@@ -437,7 +437,7 @@ class BlogPad {
 		return ( !is_null($isval) ) ? isset($settings[$setting]) && !empty($settings[$setting]) && $settings[$setting] === $isval: isset($settings[$setting]) && !empty($settings[$setting]);
 	}
 
-	static function get_setting($setting = null, $instead = null) {
+	public static function get_setting($setting = null, $instead = null) {
 		if( is_null($setting) ) {
 			trigger_error('Please provide a setting to retrieve.', E_USER_ERROR);
 			exit;
@@ -454,7 +454,7 @@ class BlogPad {
 		}
 	}
 
-	static function four_o_four($message = 'Sorry, you have made an error.', $show_error = true, array $params = array() ) {
+	protected static function four_o_four($message = 'Sorry, you have made an error.', $show_error = true, array $params = array() ) {
 
 		extract( BlogPad::extract_globs() );
 
@@ -487,7 +487,7 @@ class BlogPad {
 		}
 	}
 
-	static function static_posts_dir() {
+	public static function static_posts_dir() {
 		return ( BlogPad::has_setting('static_posts_dir') ) ? BlogPad::get_setting('base').'/'.BlogPad::get_setting('static_posts_dir'): null;
 	}
 
@@ -499,7 +499,7 @@ class BlogPad {
 	 * 
 	 */ 
 
-	static function mempty() {
+	protected static function mempty() {
 	    foreach(func_get_args() as $arg)
 	        if(empty($arg))
 	            continue;
@@ -508,11 +508,11 @@ class BlogPad {
 	    return true;
 	}
 
-	static function should_init() {
+	protected static function should_init() {
 		return BlogPad::get_setting('database') && Query::connected() !== false || BlogPad::get_setting('static_posts_dir');
 	}
 
-	static function bpf($string, array $placeholders = array()) {
+	protected static function bpf($string, array $placeholders = array()) {
 
 		if( !empty($string) ) {
 			$blogname = BlogPad::get_setting('blogname', 'A BlogPad Blog');

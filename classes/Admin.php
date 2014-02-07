@@ -1,11 +1,11 @@
 <?php 
-class Admin {
+class Admin extends BlogPad {
 
 	static function load() {
 
         date_default_timezone_set( BlogPad::get_setting('timezone', 'Europe/London') );
 
-	    spl_autoload_register('Admin::autoload');
+	    spl_autoload_register('BlogPad::autoload');
 
         set_error_handler('BlogPad::throw_error');
 
@@ -148,10 +148,6 @@ class Admin {
 
         Admin::load_part('footer');
     }
-
-	protected static function autoload($class) {
-		include "../classes/$class.php";
-	}
 
 	protected static function load_part($part = null, $settings = array()) {
 		if( is_null($part) ) {
