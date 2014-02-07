@@ -16,6 +16,7 @@ As aforementioned, the web editor provides you with the option of live-previewin
 
 ## Saving Posts
 When you're adding posts, you'll be presented with **two** options of saving your post. You can either _Publish_ your post, or save it statically.
+
 ![Differentiating](http://i.imgur.com/NpMYYUN.png)
 When saving a new post, it's important to remember that clicking _Publish Post_ means saving the post to the database, should you provide valid database credentials (_you'll receive an error if you haven't and try to save_). _Save as Static Post_ does exactly what it describes.
 
