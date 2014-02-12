@@ -6,8 +6,14 @@
     <link rel="stylesheet" href="<?php echo $stylesheet; ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 <?php if(BlogPad::$template === 'POST'): ?>
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="<?php echo $metadata['title']; ?>">
+    <meta name="twitter:description" content="<?php echo $metadata['description']; ?>">
     <meta name="description" content="<?php echo $metadata['description']; ?>">
 <?php else: ?>
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="<?php echo $metadata['blogname']; ?>">
+    <meta name="twitter:description" content="<?php echo $metadata['blogdescription']; ?>">
     <meta name="description" content="<?php echo $metadata['blogdescription']; ?>">
 <?php endif;?>
 
@@ -51,7 +57,7 @@
             <div id="disqus_thread"></div>
     <script type="text/javascript">
         /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-        var disqus_shortname = 'sharikulsblog'; // required: replace example with your forum shortname
+        var disqus_shortname = ''; // required: replace example with your forum shortname
 
         /* * * DON'T EDIT BELOW THIS LINE * * */
         (function() {

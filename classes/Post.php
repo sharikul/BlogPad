@@ -230,57 +230,18 @@ class Post extends BlogPad {
         // Cache the cache call!
         $cache = Cache::init();
 
-        $static_posts = $cache->get('static_posts');
+        $posts = $cache->get('posts');
 
-        $db_posts = $cache->get('db_posts');
+        if( is_null($posts) ) {
+            $posts = array_merge(Post::get_static_posts(), Post::get_db_posts());
 
-        if( is_null($static_posts) ) {
-            $static_posts = Post::get_static_posts();
-
-            // Store data in the cache for 5 minutes
-            $cache->set('static_posts', serialize($static_posts), 300);
+            $cache->set('posts', $posts, 300);
         }
 
-        else if( is_null($db_posts) ) {
-            $db_posts = Post::get_db_posts();
-
-            $cache->set('db_posts', serialize($db_posts), 300);
-        }
-
-        else {
-
-            if( $static_posts !== serialize(Post::get_static_posts() )) {
-                $static_posts = Post::get_static_posts();
-
-                // Recache new array
-                $cache->set('static_posts', serialize($static_posts), 300);
-            }
-
-            else if( $db_posts !== serialize(Post::get_db_posts() )) {
-                $db_posts = Post::get_db_posts();
-
-                $cache->set('db_posts', serialize($db_posts), 300);
-            }
-        }
-
-        $static_posts = ( !is_array($static_posts) ) ? unserialize($static_posts): $static_posts;
-        $db_posts = ( !is_array($db_posts) ) ? unserialize($db_posts): $db_posts;
-
-        $posts = array();
-
-        if( !empty( $static_posts ) && !empty( $db_posts ) ) {
-            $posts = array_merge( $static_posts, $db_posts );
-        }
-
-        else {
-
-            if( !empty( $static_posts ) ) {
-                $posts = array_merge($static_posts, $posts);
-            }
-
-            else if( !empty( $db_posts) ) {
-                $posts = array_merge($db_posts, $posts);
-            }
+        else if( $posts !== array_merge(Post::get_static_posts(), Post::get_db_posts()) ) {
+            $posts = array_merge(Post::get_static_posts(), Post::get_db_posts());
+            
+            $cache->set('posts', $posts, 300);
         }
 
         if( !empty( $posts ) ) {

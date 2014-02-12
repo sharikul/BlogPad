@@ -558,7 +558,7 @@ class BP_Parser {
 			if(preg_match('/{- BEGIN COUNTDOWN -}.*?{- END COUNTDOWN -}/s', $pnation[0], $cdown) ) {
 				$_cdown = str_replace('{- BEGIN COUNTDOWN -}', '<div class="bp-countdown"><?php $i = 1; while($i <= $paginate["last_page"]): ?>', $txt);
 
-				$_cdown = preg_replace('/(.*?){- number -}(.*)/', ($autolink ? '$1<a href="<?php echo Link_Parser::generate_link(BlogPad::$current_file, array("num" => $i, "word" => (isset($word)) ? $word: ""));?>"><?php echo $i;?></a>$2': '$1<?php echo $i;?>$2'), $_cdown);
+				$_cdown = preg_replace('/(.*?){- number -}(.*)/', ($autolink ? '$1<a href="<?php echo Link_Parser::generate_link(BlogPad::$template, array("num" => $i, "word" => (isset($word)) ? $word: ""));?>"><?php echo $i;?></a>$2': '$1<?php echo $i;?>$2'), $_cdown);
 
 				$_cdown = str_replace('{- END COUNTDOWN -}', '<?php $i++; endwhile; ?></div>', $_cdown);
 
@@ -566,10 +566,10 @@ class BP_Parser {
 			}
 
 			// Support the placement of custom text that will be used as a label, else display the relevant page numbers.
-			$rplace = preg_replace('/(.*?){- previous:?([A-z0-9\s]+)? -}(.*)/', '<?php if( !($pagenum - 1 <= 0) ): ?>$1'.($autolink ? '<a href="<?php echo Link_Parser::generate_link(BlogPad::$current_file, array("num" => $pagenum - 1, "word" => (isset($word)) ? $word: ""));?>"><?php echo (trim("$2") !== "") ? "$2": $pagenum - 1;?></a>': '<?php echo (trim("$2" !== "")) ? "$2": $pagenum - 1;?>').'$3<?php endif;?>', $txt);
+			$rplace = preg_replace('/(.*?){- previous:?([A-z0-9\s]+)? -}(.*)/', '<?php if( !($pagenum - 1 <= 0) ): ?>$1'.($autolink ? '<a href="<?php echo Link_Parser::generate_link(BlogPad::$template, array("num" => $pagenum - 1, "word" => (isset($word)) ? $word: ""));?>"><?php echo (trim("$2") !== "") ? "$2": $pagenum - 1;?></a>': '<?php echo (trim("$2" !== "")) ? "$2": $pagenum - 1;?>').'$3<?php endif;?>', $txt);
 
 
-			$rplace = preg_replace('/(.*?){- next:?([A-z0-9\s]+)? -}(.*)/', '<?php if($pagenum + 1 > 1 && $pagenum < $paginate["last_page"]): ?>$1'.($autolink ? '<a href="<?php echo Link_Parser::generate_link(BlogPad::$current_file, array("num" => $pagenum + 1, "word" => (isset($word)) ? $word: ""));?>"><?php echo (trim("$2") !== "") ? "$2": $pagenum + 1;?></a>': '<?php echo (trim("$2") !== "") ? "$2": $pagenum + 1;?>').'$3<?php endif;?>', $rplace);
+			$rplace = preg_replace('/(.*?){- next:?([A-z0-9\s]+)? -}(.*)/', '<?php if($pagenum + 1 > 1 && $pagenum < $paginate["last_page"]): ?>$1'.($autolink ? '<a href="<?php echo Link_Parser::generate_link(BlogPad::$template, array("num" => $pagenum + 1, "word" => (isset($word)) ? $word: ""));?>"><?php echo (trim("$2") !== "") ? "$2": $pagenum + 1;?></a>': '<?php echo (trim("$2") !== "") ? "$2": $pagenum + 1;?>').'$3<?php endif;?>', $rplace);
 
 			$p_processed .= $rplace;
 
