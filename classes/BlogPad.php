@@ -4,7 +4,7 @@ class BlogPad {
 
 	static $vars = array();
 
-	static $template = 'HOMEPAGE';
+	static $template = '';
 
 	/**
 	 * Executes BlogPad and gets the environment set up.
@@ -62,8 +62,6 @@ class BlogPad {
 			exit;
 		}
 
-		
-
 		if( empty($structure['paths']) ) {
 			trigger_error("BlogPad couldn't find any file structures defined in $folder/struct.bpd.", E_USER_ERROR);
 			exit;
@@ -77,7 +75,7 @@ class BlogPad {
 
 		Link_Parser::load();
 
-		BlogPad::load_page(BlogPad::$template, BlogPad::$vars);
+		BlogPad::init();
 	}
 
 	/**
@@ -210,13 +208,9 @@ class BlogPad {
 	 * 
 	 */
 
-	protected static function load_page($page = null, array $params = array() ) {
-		if( is_null($page) ) {
-			trigger_error('Please provide a page to load.', E_USER_ERROR);
-			exit;
-		}
+	protected static function init() {
 
-		extract($params);
+		extract( BlogPad::$vars );
 
 		extract( BlogPad::extract_globs() );
 
@@ -227,7 +221,7 @@ class BlogPad {
 		$js_includes = $includes_dir.'/js/';
 		$css_includes = $includes_dir.'/css/';
 
-		switch( $page ) {
+		switch( BlogPad::$template ) {
 			case 'CATEGORY':
 
 				$posts = array();

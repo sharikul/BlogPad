@@ -1,6 +1,6 @@
 <?php
 
-class Link_Parser {
+class Link_Parser extends BlogPad {
 
 	/**
 	 * Initializes the class and runs checks on URL's against defined structures.
@@ -38,6 +38,17 @@ class Link_Parser {
 
 			}
 
+		}
+
+		// If the template is still empty at this point, this could mean that the link structure has not been defined yet. If the URI is not empty, error, else display the homepage (as an empty URI indicates the root).
+		if( empty(BlogPad::$template) ) {
+			if( Link_Parser::current_uri() !== '' ) {
+				BlogPad::four_o_four();
+			}
+
+			else {
+				BlogPad::$template = 'HOMEPAGE';
+			} 
 		}
 	}
 
@@ -88,7 +99,7 @@ class Link_Parser {
 	 */ 
 
 	static function current_uri() {
-    		return preg_replace('/^\/?'.basename(BlogPad::get_setting('base')).'\/?/', '', $_SERVER['REQUEST_URI']); 
+    	return preg_replace('/^\/?'.basename(BlogPad::get_setting('base')).'\/?/', '', $_SERVER['REQUEST_URI']); 
 	}
 
 	/**

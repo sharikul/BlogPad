@@ -161,7 +161,7 @@ class Post extends BlogPad {
                 }   
             }
 
-            return ( !empty( $posts ) ) ? $posts: null;
+            return $posts;
         }
 
     }
@@ -216,7 +216,7 @@ class Post extends BlogPad {
 
         }
 
-        return ( !empty($posts) ) ? $posts: null;
+        return $posts;
     }
 
     /**
