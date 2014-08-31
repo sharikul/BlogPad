@@ -2,7 +2,7 @@
 **You should follow the instructions or tips provided in this help file after following the instructions of system_requirements.md.**
 
 ## settings.php
-_settings.php_ is the file which is home to the wide variety of settings that impacts your BlogPad blog. 
+_settings.php_ is the file which is home to the wide variety of settings that affect your BlogPad blog. 
 
 Here, you'll gain an understanding of the keys found in this file and their significance to your blog:
 
