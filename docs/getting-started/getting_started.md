@@ -22,6 +22,15 @@ Here, you'll gain an understanding of the keys found in this file and their sign
 
 * `post_sort_type` - This key should only hold the values `DESC` or `ASC` which stand for _descending_ and _ascending_, respectively, and these signify the order in which posts should appear in. When set to `DESC`, posts will begin to show starting from the most recently added post. 
 
+* `titles` - This key should store an array that describes the page title of a template. The format that you should follow is: `TEMPLATE => 'Title'`. There are several placeholders you can use within the title string which are wrapped around percentage symbols. The placeholders are as follows:
+
+  * `%blogname%`: The name of your blog will replace this placeholder.
+  * `%blogdescription%`: The description of your blog (defined in settings.php) will replace this placeholder.
+  * `%posttitle`: The title of the current blog post will replace this placeholder.
+  * `%category`: **You should only use this placeholder in your CATEGORY template**. The category being accessed will replace this placeholder.
+  * `%searchquery%`: The text of the search query will replace this placeholder.
+  * `%username%`: **You should only use this placeholder in your PROFILE template**. The username whose profile is being accessed will replace this placeholder.
+
 * `accounts` - This key should hold a sub-array containing the accounts with their respective credentials. This is the format that you should follow: `username => array('firstname' => 'firstname', 'lastname' => 'lastname', 'username' => 'username', 'password' => 'password')` **Please make use of `crypt_gen.php` to generate a crypted password and this crypted password should be the value of the password key in an account array**.
 
 ## Routing
